@@ -1,0 +1,201 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ruleset name="Custom Rules" xmlns="http://pmd.sourceforge.net/ruleset/2.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://pmd.sourceforge.net/ruleset/2.0.0 http://pmd.sourceforge.net/ruleset_2_0_0.xsd">
+
+	<description>PMD Plugin preferences rule set</description>
+	
+	<rule ref="rulesets/java/basic.xml" />
+	<rule ref="rulesets/java/braces.xml" />
+	<rule ref="rulesets/java/imports.xml">
+		 <!-- Exclude TooManyStaticImports because we customize it below -->
+		<exclude name="TooManyStaticImports" />
+	</rule>
+	<rule ref="rulesets/java/strings.xml">
+		<!-- Exclude AvoidDuplicateLiterals because we customize it below -->
+		<exclude name="AvoidDuplicateLiterals" />
+		<!-- As the length of String buffer increases  -->
+		<exclude name="InsufficientStringBufferDeclaration" />
+	</rule>
+	<rule ref="rulesets/java/unusedcode.xml" />
+	<!-- Do not call system.exit() -->
+	<rule ref="rulesets/java/j2ee.xml/DoNotCallSystemExit" />
+	<!-- Exception rules -->
+	<rule ref="rulesets/java/strictexception.xml/AvoidCatchingNPE" />
+	<rule ref="rulesets/java/strictexception.xml/AvoidThrowingNewInstanceOfSameException" />
+	<rule ref="rulesets/java/strictexception.xml/AvoidThrowingNullPointerException" />
+	<rule ref="rulesets/java/strictexception.xml/DoNotExtendJavaLangError" />
+	<rule ref="rulesets/java/strictexception.xml/DoNotThrowExceptionInFinally" />
+	<rule ref="rulesets/java/strictexception.xml/ExceptionAsFlowControl" />
+	<!-- Skip annotations when checking for duplicate string literals -->
+	<rule ref="rulesets/java/strings.xml/AvoidDuplicateLiterals">
+		<properties>
+			<!-- Skip annotations when checking for duplicate literals -->
+			<property name="skipAnnotations" value="true" />
+		</properties>
+	</rule> 
+	<!-- Customize TooManyStaticImports inside imports ruleset -->
+	<rule ref="rulesets/java/imports.xml/TooManyStaticImports">
+		<properties>
+			<property name="maximumStaticImports" value="8" />
+		</properties>
+	</rule>
+	
+	<!--  Code size rules. All of the property values used below are 2x or 3x 
+		the default values. -->
+	<rule ref="rulesets/java/codesize.xml/ExcessiveMethodLength">
+		<properties>
+			<property name="minimum" value="200" />
+		</properties>
+	</rule>
+	<rule ref="rulesets/java/codesize.xml/ExcessiveParameterList">
+		<properties>
+			<property name="minimum" value="20" />
+		</properties>
+	</rule>
+	<rule ref="rulesets/java/codesize.xml/ExcessiveClassLength">
+		<properties>
+			<property name="minimum" value="2000" />
+		</properties>
+	</rule>
+	<rule ref="rulesets/java/codesize.xml/CyclomaticComplexity">
+		<properties>
+			<property name="reportLevel" value="30" />
+		</properties>
+	</rule>
+	<rule ref="rulesets/java/codesize.xml/ExcessivePublicCount">
+		<properties>
+			<property name="minimum" value="90" />
+		</properties>
+	</rule>
+	<rule ref="rulesets/java/codesize.xml/TooManyFields">
+		<properties>
+			<property name="maxfields" value="50" />
+		</properties>
+	</rule>
+	<rule ref="rulesets/java/codesize.xml/NcssMethodCount">
+		<properties>
+			<property name="minimum" value="200" />
+		</properties>
+	</rule>
+	<rule ref="rulesets/java/codesize.xml/NcssTypeCount">
+		<properties>
+			<property name="minimum" value="3000" />
+		</properties>
+	</rule>
+	<rule ref="rulesets/java/codesize.xml/NcssConstructorCount">
+		<properties>
+			<property name="minimum" value="150" />
+		</properties>
+	</rule>
+	<rule ref="rulesets/java/codesize.xml/TooManyMethods">
+		<properties>
+			
+			<property name="maxmethods" value="50" />
+			<property name="xpath">
+				<value>
+                    <![CDATA[
+                    //ClassOrInterfaceDeclaration[
+                        not(descendant::ExtendsList/ClassOrInterfaceType/@Image = "TestCase") and
+                        not(@Image = "ObjectFactory")
+                    ]/ClassOrInterfaceBody[
+                        count(descendant::MethodDeclarator[
+                            not (
+                                starts-with(@Image,'get') or starts-with(@Image,'set')
+                            )
+                        ]) > $maxmethods
+                    ]
+                    ]]>
+                </value>
+			</property>
+		</properties>
+	</rule>
+	<!-- All log calls must be wrapped with an if guard -->
+	<rule name="GuardDebugLogging" language="java" 
+		message="Error: log.debug() must be guarded with if (log.isDebugEnabled())"
+		class="net.sourceforge.pmd.lang.rule.XPathRule">
+		<priority>3</priority>
+		<properties>
+			<property name="xpath">
+				<value>
+                    <![CDATA[
+                        //PrimaryPrefix[ends-with(Name/@Image, '.debug') and
+                        count(../descendant::AdditiveExpression) >= 0 and 
+                        count(ancestor::IfStatement/descendant::PrimaryExpression[ends-with(descendant::PrimaryPrefix/Name/@Image, 
+                        'isDebugEnabled')]) = 0]
+                    ]]>
+               </value>
+			</property>
+		</properties>
+	</rule>
+	<rule name="GuardInfoLogging"
+        message="Error: log.info() must be guarded with if (log.isInfoEnabled())" language="java" 
+        class="net.sourceforge.pmd.lang.rule.XPathRule">
+        <priority>3</priority>
+        <properties>
+            <property name="xpath">
+                <value>
+                    <![CDATA[
+                        //PrimaryPrefix[ends-with(Name/@Image, '.info') and
+                        count(../descendant::AdditiveExpression) >= 0 and 
+                        count(ancestor::IfStatement/descendant::PrimaryExpression[ends-with(descendant::PrimaryPrefix/Name/@Image, 
+                        'isInfoEnabled')]) = 0]
+                    ]]>
+               </value>
+            </property>
+        </properties>
+    </rule>
+    <rule name="GuardWarnLogging"
+        message="Error: log.warn() must be guarded with if (log.isWarnEnabled())" language="java" 
+        class="net.sourceforge.pmd.lang.rule.XPathRule">
+        <priority>3</priority>
+        <properties>
+            <property name="xpath">
+                <value>
+                    <![CDATA[
+                        //PrimaryPrefix[ends-with(Name/@Image, '.warn') and
+                        count(../descendant::AdditiveExpression) >= 0 and 
+                        count(ancestor::IfStatement/descendant::PrimaryExpression[ends-with(descendant::PrimaryPrefix/Name/@Image, 
+                        'isWarnEnabled')]) = 0]
+                    ]]>
+               </value>
+            </property>
+        </properties>
+    </rule>
+    <rule name="GuardErrorLogging"
+        message="Error: log.error() must be guarded with if (log.isErrorEnabled())" language="java" 
+        class="net.sourceforge.pmd.lang.rule.XPathRule">
+        <priority>3</priority>
+        <properties>
+            <property name="xpath">
+                <value>
+                    <![CDATA[
+                        //PrimaryPrefix[ends-with(Name/@Image, '.error') and
+                        count(../descendant::AdditiveExpression) >= 0 and 
+                        count(ancestor::IfStatement/descendant::PrimaryExpression[ends-with(descendant::PrimaryPrefix/Name/@Image, 
+                        'isErrorEnabled')]) = 0]
+                    ]]>
+               </value>
+            </property>
+        </properties>
+    </rule>
+    <!-- Prevent System.out.println and System.err.println -->
+	<rule name="SystemOutErrPrintlnProhibited"
+		message="Error: System.out.println() and System.err.println() must not be used" language="java" 
+		class="net.sourceforge.pmd.lang.rule.XPathRule">
+		<priority>3</priority>
+		<properties>
+			<property name="xpath">
+				<value>
+                    <![CDATA[
+                        //Name[
+                                starts-with(@Image, 'System.out.print')
+                                or
+                                starts-with(@Image, 'System.err.print')
+                              ]
+                    ]]>
+               </value>
+			</property>
+		</properties>
+	</rule>
+</ruleset>

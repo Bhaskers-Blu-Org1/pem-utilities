@@ -1,0 +1,15 @@
+# Gradle project-specific cache directory
+.gradle
+
+# Gradle build output directory
+build
+
+# Eclipse output directory
+bin
+
+# Eclipse metadata
+.project
+.classpath
+.settings
+
+.DS_Store
