@@ -39,7 +39,7 @@ This repository does not have a traditional release management cycle, but should
 ## Merge approval
 The project maintainers use LGTM (Looks Good To Me) in comments on the code review to indicate acceptance. A change requires LGTMs from two of the maintainers of each component affected.
 
-For a list of the maintainers, see the [MAINTAINERS.md](https://github.com/IBM/pem-utilities/MAINTAINERS.md) page.
+For a list of the maintainers, see the [MAINTAINERS](https://github.com/IBM/pem-utilities/blob/master/MAINTAINERS.md) page.
 
 ## Communication
 Discussion of the proposed feature or bug should be conducted in the issue itself, so that we have a consistent pattern within our community as to where to find design discussion.
@@ -76,4 +76,4 @@ You must use your real name, not an alias or pseudonym. If you are contributing 
 ## Coding style guidelines
 Contribute in the style of the project to the best of your abilities. This may mean using indents, semi-colons or comments differently than you would in your own repository, but makes it easier for the maintainer to merge, others to understand and maintain in the future.
 
-For Eclipse users, make use of the Java code formatting style available [here](https://github.com/IBM/pem-utilities/config/formatter/java_formatter.xml). If not, please review the styles and configure your IDE of choice accordingly.
+For Eclipse users, make use of the Java code formatting style available [here](https://github.com/IBM/pem-utilities/blob/master/sfg2pem-migrator/config/formatter/java_formatter.xml). If not, please review the styles and configure your IDE of choice accordingly.

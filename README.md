@@ -22,10 +22,10 @@ gradle clean build
 5. Execute `run.sh` on Linux/Mac or `run.bat` on Windows. You might need to provide 'execute' permissions to the scripts. 
 
 ## Contributing
-We welcome contributions in many forms; there's always plenty to do! Check the [how to contribute](https://github.com/IBM/pem-utilities/CONTRIBUTING.md) page for details.
+We welcome contributions in many forms; there's always plenty to do! Check the [how to contribute](https://github.com/IBM/pem-utilities/blob/master/CONTRIBUTING.md) page for details.
 
 ## Support
-Check the documentation [here](https://github.com/IBM/pem-utilities/CONTRIBUTING.md).
+Check the documentation [here](https://github.com/IBM/pem-utilities/blob/master/CONTRIBUTING.md).
 
 ## License
-The source code files are made available under the Apache License, Version 2.0 (Apache-2.0), located in the [license](https://github.com/IBM/pem-utilities/LICENSE.md) file.
+The source code files are made available under the Apache License, Version 2.0 (Apache-2.0), located in the [license](https://github.com/IBM/pem-utilities/blob/master/LICENSE) file.
