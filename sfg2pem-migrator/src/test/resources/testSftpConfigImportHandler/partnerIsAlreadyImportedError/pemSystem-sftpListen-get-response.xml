@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Systems>
+	<System resourceType="SYSTEM" systemKey="systemKey01"
+		sponsorKey="sponsorKey01" configurationVersion="1.0">
+		<configurationTypes>
+			<SystemType systemTypeKey="prodSystemTypeKey01">
+				<extensions>
+					<SystemTypeExtn extensionName="AuthenticationHost"
+						systemTypeExtnKey="systemTypeExtnKey01" />
+					<SystemTypeExtn extensionName="PartnerPrefix"
+						extensionValue="test01-id01"
+						systemTypeExtnKey="systemTypeExtnKey02" />
+					<SystemTypeExtn extensionName="SFGCommunityName"
+						extensionValue="community1"
+						systemTypeExtnKey="systemTypeExtnKey03" />
+					<SystemTypeExtn extensionName="SFGPartnerKey"
+						extensionValue="test01-id01"
+						systemTypeExtnKey="systemTypeExtnKey04" />
+				</extensions>
+				<type code="PROD" display="Production" />
+				<systemProfileRefs>
+					<SystemProfileRef
+						profileRefName="SFTPIBPullProfileConfig"
+						profileRefType="SFTP_INB_PULL"
+						systemProfileRefKey="systemProfileRefKey01">
+						<profileRef
+							profileConfigurationKey="profileConfigurationKey01">
+							<resourceType code="SFTP" display="SFTP" />
+						</profileRef>
+					</SystemProfileRef>
+					<SystemProfileRef
+						profileRefName="SFTPOBPushProfileConfig"
+						profileRefType="SFTP_OUT_PUSH"
+						systemProfileRefKey="systemProfileRefKey02">
+						<profileRef
+							profileConfigurationKey="profileConfigurationKey02">
+							<resourceType code="SFTP" display="SFTP" />
+						</profileRef>
+					</SystemProfileRef>
+					<SystemProfileRef
+						profileRefName="KnownHostKeyProfileConfig"
+						profileRefType="SSH_KEY"
+						systemProfileRefKey="systemProfileRefKey03">
+						<profileRef
+							profileConfigurationKey="profileConfigurationKey03">
+							<resourceType code="SSH_KEY" display="SSH Key" />
+						</profileRef>
+					</SystemProfileRef>
+					<SystemProfileRef
+						profileRefName="UserCredProfileConfig" profileRefType="USER_CRED"
+						systemProfileRefKey="systemProfileRefKey04">
+						<profileRef
+							profileConfigurationKey="profileConfigurationKey04">
+							<resourceType code="USER_CRED" display="User Cred" />
+						</profileRef>
+					</SystemProfileRef>
+				</systemProfileRefs>
+				<inbound code="Y" display="Yes" />
+				<outbound code="Y" display="Yes" />
+			</SystemType>
+			<SystemType systemTypeKey="testSystemTypeKey01">
+				<extensions>
+					<SystemTypeExtn extensionName="AuthenticationHost"
+						systemTypeExtnKey="systemTypeExtnKey05" />
+					<SystemTypeExtn extensionName="PartnerPrefix"
+						extensionValue="test01-id01"
+						systemTypeExtnKey="systemTypeExtnKey06" />
+					<SystemTypeExtn extensionName="SFGCommunityName"
+						extensionValue="community1"
+						systemTypeExtnKey="systemTypeExtnKey07" />
+					<SystemTypeExtn extensionName="SFGPartnerKey"
+						extensionValue="test01-id01"
+						systemTypeExtnKey="systemTypeExtnKey08" />
+				</extensions>
+				<type code="TEST" display="Test" />
+				<systemProfileRefs>
+					<SystemProfileRef
+						profileRefName="SFTPIBPullProfileConfig"
+						profileRefType="SFTP_INB_PULL"
+						systemProfileRefKey="systemProfileRefKey05">
+						<profileRef
+							profileConfigurationKey="profileConfigurationKey05">
+							<resourceType code="SFTP" display="SFTP" />
+						</profileRef>
+					</SystemProfileRef>
+					<SystemProfileRef
+						profileRefName="SFTPOBPushProfileConfig"
+						profileRefType="SFTP_OUT_PUSH"
+						systemProfileRefKey="systemProfileRefKey06">
+						<profileRef
+							profileConfigurationKey="profileConfigurationKey06">
+							<resourceType code="SFTP" display="SFTP" />
+						</profileRef>
+					</SystemProfileRef>
+					<SystemProfileRef
+						profileRefName="KnownHostKeyProfileConfig"
+						profileRefType="SSH_KEY"
+						systemProfileRefKey="systemProfileRefKey07">
+						<profileRef
+							profileConfigurationKey="profileConfigurationKey07">
+							<resourceType code="SSH_KEY" display="SSH Key" />
+						</profileRef>
+					</SystemProfileRef>
+					<SystemProfileRef
+						profileRefName="UserCredProfileConfig" profileRefType="USER_CRED"
+						systemProfileRefKey="systemProfileRefKey08">
+						<profileRef
+							profileConfigurationKey="profileConfigurationKey08">
+							<resourceType code="USER_CRED" display="User Cred" />
+						</profileRef>
+					</SystemProfileRef>
+				</systemProfileRefs>
+				<inbound code="Y" display="Yes" />
+				<outbound code="Y" display="Yes" />
+			</SystemType>
+		</configurationTypes>
+		<isDefaultVersion code="Y" display="Yes" />
+		<status code="PROD_CFG_PVRN_COMPLETE"
+			display="Provisioning Complete (Production Configuration)" />
+	</System>
+</Systems>

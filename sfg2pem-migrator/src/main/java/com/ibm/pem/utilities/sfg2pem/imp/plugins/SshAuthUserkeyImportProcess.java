@@ -20,6 +20,7 @@ import com.ibm.pem.utilities.sfg2pem.imp.PartnerInfo;
 import com.ibm.pem.utilities.sfg2pem.imp.PrConfigurationProcessor;
 import com.ibm.pem.utilities.sfg2pem.imp.plugins.resources.ManagedSshkeysXSLT;
 import com.ibm.pem.utilities.sfg2pem.imp.plugins.resources.SftpResourceHelper;
+import com.ibm.pem.utilities.util.DOMUtils;
 
 public class SshAuthUserkeyImportProcess extends PrConfigurationProcessor {
 
@@ -30,11 +31,12 @@ public class SshAuthUserkeyImportProcess extends PrConfigurationProcessor {
 			throws ApiInvocationException, ImportException, ParserConfigurationException, SAXException, IOException {
 		Document sshRemoteProfileData = getFromProductionSfg ? getPartnerInfo().getProdSfgPartnerDoc()
 				: getPartnerInfo().getTestSfgPartnerDoc();
-		String knownHostKey = SftpResourceHelper.getAttributeValueByTagName(sshRemoteProfileData, "TradingPartner",
+		String knownHostKey = DOMUtils.getAttributeValueByTagName(sshRemoteProfileData, "TradingPartner",
 				"authorizedUserKeyName");
-		String knownHostData = SftpResourceHelper.getResourceFromSFG(getConfig(), getFromProductionSfg, GET_MANAGED_SSH_KEY_DATA_URL, knownHostKey)
+		String knownHostData = SftpResourceHelper
+				.getResourceFromSFG(getConfig(), getFromProductionSfg, GET_MANAGED_SSH_KEY_DATA_URL, knownHostKey)
 				.getResponse();
-		return SftpResourceHelper.getAttributeValueByTagName(knownHostData, "SSHAuthorizedUserKey", "keyData");
+		return DOMUtils.getAttributeValueByTagName(knownHostData, "SSHAuthorizedUserKey", "keyData");
 	}
 
 	public SshAuthUserkeyImportProcess(PartnerInfo partnerInfo, Configuration config) {
@@ -75,9 +77,10 @@ public class SshAuthUserkeyImportProcess extends PrConfigurationProcessor {
 	@Override
 	protected String createConfigResource(String profileConfigKey) throws ImportException {
 		try {
-			String requestXml = SftpResourceHelper.createXml(ManagedSshkeysXSLT.createManagedSshkeys(getConfig(),
+			String requestXml = DOMUtils.createXml(ManagedSshkeysXSLT.createManagedSshkeys(getConfig(),
 					profileConfigKey, getKeyData(true), getKeyData(false), getKeyType()));
-			return SftpResourceHelper.callCreateApi(getConfig(), requestXml, getConfig().buildPRUrl(CREATE_MANAGED_SSH_KEY_API_URL), "managedSshKeyKey");
+			return SftpResourceHelper.callCreateApi(getConfig(), requestXml,
+					getConfig().buildPRUrl(CREATE_MANAGED_SSH_KEY_API_URL), "managedSshKeyKey");
 		} catch (TransformerException | IOException | ParserConfigurationException | SAXException
 				| ApiInvocationException e) {
 			throw new ImportException(e);

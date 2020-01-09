@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<create name="%s" partner="%s" resourceType="%s" serverType="PR"
+    subResourceType="%s">
+    <owningDivisions>
+        <SubResourceDivisionRef sponsorDivisionKey="%s" />
+    </owningDivisions>
+</create>

@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<UserAccount _id="%s" email="Tyrone@%s.com"
+	givenName="Tyrone" sessionTimeout="0" surname="Masters" userId="%s"
+	userIdentity="%s">
+	<authenticationType code="Local" display="Local" />
+	<groups>
+		<UserGroupName name="File Gateway Partner Users" />
+		<UserGroupName name="Mailbox Browser Interface Users" />
+	</groups>
+	<permissions>
+		<PermissionName name="/%s/Cashbank Mailbox" />
+		<PermissionName name="/%s/Inbox Mailbox" />
+		<PermissionName name="/%s Mailbox" />
+	</permissions>
+	<preferredLanguage code="en" display="English" />
+</UserAccount>

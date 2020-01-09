@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ManagedSshKeys>
+	<ManagedSshKey configurationVersion="1.0"
+		resourceType="SSH_KEY" sponsorKey="%s" managedSshKeyKey="%s">
+		<status code="NEW" display="New" />
+		<isDefaultVersion code="Y" display="Yes" />
+		<configurationId name="%s"
+			profileConfigurationKey="%s" />
+		<configurationTypes>
+			<ManagedSshKeyType
+				content="c3NoLXJzYSBBQUFBQjNOemFDMXljMkVBQUFBREFRQUJBQUFBZ1FDSUNuSWZpM29EYnhpNUVza2Z3c1l4SkdKM29la0UvMkFmanV1MXJ5dHYvcktNTS9kbURjTS9qQnRIdkpSdTJ3cjJIdUk0RGZsOXh2dlhKZWtyYUdRM3FMMklXTHVLM0lXOW4ra2NUMTR5TlBnYzhab0k0cVhYT1k4cDBtWGFCeE1URVFWbUMvWUFOcnVwSlJoT3lwTHkya1hIb1BoaEtVZU5CakZ5UGlvMmh3PT0gZGVmYXVsdA=="
+				endDate="2030-05-01T00:00:00.000+0000"
+				expirationDate="2030-05-01T00:00:00.000+0000"
+				managedSshKeyTypeKey="60a83330-e8e5-4706-8da5-bdd25044f180"
+				sponsorKey="2405680d-5aea-425d-9773-28affc005bc0"
+				startDate="2016-11-01T00:00:00.000+0000">
+				<keyType code="KNOWN_HOST_KEYS" display="Known Host Keys" />
+				<type code="PROD" display="Production" />
+			</ManagedSshKeyType>
+			<ManagedSshKeyType
+				content="c3NoLXJzYSBBQUFBQjNOemFDMXljMkVBQUFBREFRQUJBQUFBZ1FDSUNuSWZpM29EYnhpNUVza2Z3c1l4SkdKM29la0UvMkFmanV1MXJ5dHYvcktNTS9kbURjTS9qQnRIdkpSdTJ3cjJIdUk0RGZsOXh2dlhKZWtyYUdRM3FMMklXTHVLM0lXOW4ra2NUMTR5TlBnYzhab0k0cVhYT1k4cDBtWGFCeE1URVFWbUMvWUFOcnVwSlJoT3lwTHkya1hIb1BoaEtVZU5CakZ5UGlvMmh3PT0gZGVmYXVsdA=="
+				endDate="2030-05-01T00:00:00.000+0000"
+				expirationDate="2030-05-01T00:00:00.000+0000"
+				managedSshKeyTypeKey="44f3e481-074e-4e30-85ca-5eebcb9d270a"
+				sponsorKey="2405680d-5aea-425d-9773-28affc005bc0"
+				startDate="2016-11-01T00:00:00.000+0000">
+				<keyType code="KNOWN_HOST_KEYS" display="Known Host Keys" />
+				<type code="TEST" display="Test" />
+			</ManagedSshKeyType>
+		</configurationTypes>
+	</ManagedSshKey>
+</ManagedSshKeys>

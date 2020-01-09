@@ -1,0 +1,5 @@
+User Name~Company Name~Website~First Name~Last Name~Street Address~City~Country~State~Email~Zip Code~Head Office Phone~Business Role~Office Phone~Mobile Phone~Further Contacts~Question~Answer~Comments~Attribute Type~Attribute Value~Attribute Type~Attribute Value~Custom Field Name~Custom Field Value~Custom Field Name~Custom Field Value~Division Name~Do Not Invite~Partner Key~Partner Group ID
+Tyrone@partner01.com~test01-id01~~Tyrone~Masters~~City9~~~~~~~9999999999~~~~~~~~~~~~~~~~~#pgid-01
+Tyrone@partner02.com~test02-id02~~Tyrone~Masters~~City9~~~~~~~9999999999~~~~~~~~~~~~~~~~test02-partnerKey~
+Tyrone@partner03.com~test03-id03~~Tyrone~Masters~~City9~~~~~~~9999999999~~~~~~~~~~~~~~~~test03-partnerKey~#pgid-03
+Tyrone@partner04.com~test04-id04~~Tyrone~Masters~~City9~~~~~~~9999999999~~~~~~~~~~~~~~~~test04-partnerKey~#pgid-03

@@ -27,15 +27,16 @@ import com.ibm.pem.utilities.sfg2pem.Constants;
 public class ProfileConfigurationXSLT {
 
 	public Document createProfileConfiguration(Configuration config, String name, String resourceType,
-			String subResourceType, String serverType, String pemPartnerKey, String sponsorDivisionKey, String parentProfileKey)
+			String subResourceType, String serverType, String pemPartnerKey, String sponsorDivisionKey,
+			String parentProfileKey)
 			throws TransformerException, ParserConfigurationException, SAXException, IOException {
 		StringReader dummyInput = new StringReader("<a>pem</a>");
 		StringWriter outPutXml = new StringWriter();
 		TransformerFactory tFactory = TransformerFactory.newInstance();
-		File inputXSLT = new File(config.getInstallDirectory() + "/xslt/profileConfiguration.xsl").getAbsoluteFile();
+		File inputXSLT = new File(config.getXsltDirectory() + "/profileConfiguration.xsl").getAbsoluteFile();
 		Transformer transformer = tFactory.newTransformer(new javax.xml.transform.stream.StreamSource(inputXSLT));
 		transformer.setParameter("name", name);
-		
+
 		switch (serverType) {
 		case Constants.SERVER_TYPE_DG:
 			transformer.setParameter("parentProfileKey", parentProfileKey);

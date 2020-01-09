@@ -23,6 +23,7 @@ import com.ibm.pem.utilities.sfg2pem.imp.plugins.resources.AssociateAuthUserToUs
 import com.ibm.pem.utilities.sfg2pem.imp.plugins.resources.SftpResourceHelper;
 import com.ibm.pem.utilities.sfg2pem.imp.plugins.resources.UserCredentialXSLT;
 import com.ibm.pem.utilities.util.ApiResponse;
+import com.ibm.pem.utilities.util.DOMUtils;
 
 public class UserCredentialImportProcessor extends PrConfigurationProcessor {
 
@@ -73,7 +74,7 @@ public class UserCredentialImportProcessor extends PrConfigurationProcessor {
 				getTestUserName = getRemoteUserName(sftpConfigInfo.getTestRemoteProfileDoc());
 			}
 
-			String requestXml = SftpResourceHelper.createXml(new UserCredentialXSLT().createUserCerdential(getConfig(),
+			String requestXml = DOMUtils.createXml(new UserCredentialXSLT().createUserCerdential(getConfig(),
 					profileConfigKey, getProdUserName, getTestUserName));
 			return SftpResourceHelper.callCreateApi(getConfig(), requestXml,
 					getConfig().buildPRUrl(CRETAE_MANAGED_USERCREDENTIAL_API_URL), "managedUserCredentialKey");
@@ -84,13 +85,13 @@ public class UserCredentialImportProcessor extends PrConfigurationProcessor {
 	}
 
 	private String getRemoteUserName(Document doc) {
-		return SftpResourceHelper.getAttributeValueByTagName(doc, "SSHRemoteProfile", "remoteUser");
+		return DOMUtils.getAttributeValueByTagName(doc, "SSHRemoteProfile", "remoteUser");
 	}
 
 	private String getUserName(boolean isProd) {
 		Document sshRemoteProfileData = isProd ? getPartnerInfo().getProdSfgPartnerDoc()
 				: getPartnerInfo().getTestSfgPartnerDoc();
-		return SftpResourceHelper.getAttributeValueByTagName(sshRemoteProfileData, "TradingPartner", "username");
+		return DOMUtils.getAttributeValueByTagName(sshRemoteProfileData, "TradingPartner", "username");
 	}
 
 	@Override
@@ -114,9 +115,8 @@ public class UserCredentialImportProcessor extends PrConfigurationProcessor {
 				String apiURL = "{PROTOCOL}://{PR.HOST_NAME}{:PR.PORT}/mdrws/sponsors/{CONTEXT_URI}/"
 						+ "profileconfigurations/" + profileConfigKey + "/userCredSshKeys/";
 				if (getAssignedKey(profileConfigKey, apiURL) == null) {
-					String requestXml = SftpResourceHelper
-							.createXml(AssociateAuthUserToUserCredXSLT.associateAuthUserToUserCred(getConfig(),
-									partnerInfo.getSshAuthorizedUserkeyProfileConfigKey()));
+					String requestXml = DOMUtils.createXml(AssociateAuthUserToUserCredXSLT.associateAuthUserToUserCred(
+							getConfig(), partnerInfo.getSshAuthorizedUserkeyProfileConfigKey()));
 					SftpResourceHelper.callCreateApi(getConfig(), requestXml, getConfig().buildPRUrl(apiURL),
 							"managedUserCredentialKey");
 				}
@@ -132,7 +132,7 @@ public class UserCredentialImportProcessor extends PrConfigurationProcessor {
 		try {
 			String url = getConfig().buildPRUrl(apiURL + String.format("?profileConfigKey=%s", profileConfigKey));
 			ApiResponse apiResponse = SftpResourceHelper.getResourceFromPR(getConfig(), url);
-			return SftpResourceHelper.getAttributeValueByTagName(apiResponse.getResponse(), "managedSshKeyConfigId",
+			return DOMUtils.getAttributeValueByTagName(apiResponse.getResponse(), "managedSshKeyConfigId",
 					"profileConfigurationKey");
 		} catch (IOException | ParserConfigurationException | SAXException | ApiInvocationException e) {
 			throw new ImportException(e);

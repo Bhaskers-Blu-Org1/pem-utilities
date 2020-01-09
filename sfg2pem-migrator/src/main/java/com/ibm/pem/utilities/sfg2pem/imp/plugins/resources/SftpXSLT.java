@@ -37,10 +37,10 @@ public class SftpXSLT {
 
 		File inputXSLT;
 		if (subResourceType.equals(Constants.SFTP_INB_PULL)) {
-			inputXSLT = new File(config.getInstallDirectory() + "/xslt/sftpInbPull.xsl").getAbsoluteFile();
+			inputXSLT = new File(config.getXsltDirectory() + "/sftpInbPull.xsl").getAbsoluteFile();
 			transformer = tFactory.newTransformer(new javax.xml.transform.stream.StreamSource(inputXSLT));
 		} else if (subResourceType.equals(Constants.SFTP_OUT_PUSH)) {
-			inputXSLT = new File(config.getInstallDirectory() + "/xslt/sftpOutbPush.xsl").getAbsoluteFile();
+			inputXSLT = new File(config.getXsltDirectory() + "/sftpOutbPush.xsl").getAbsoluteFile();
 			transformer = tFactory.newTransformer(new javax.xml.transform.stream.StreamSource(inputXSLT));
 		}
 		transformer.setParameter("configurationId", configurationId);
@@ -49,14 +49,12 @@ public class SftpXSLT {
 		if (userCredentialProfileConfigKey != null) {
 			transformer.setParameter("userCredential", userCredentialProfileConfigKey);
 		}
-		
-		//Stamping authorizedUserKey instead of userIdentityKey
+
+		// Stamping authorizedUserKey instead of userIdentityKey
 		if (userIdentityKeyProfileConfigKey != null && (subResourceType.equals(Constants.SFTP_INB_PULL)
 				|| subResourceType.equals(Constants.SFTP_OUT_PUSH))) {
-			transformer.setParameter("authorizedUserKey", userIdentityKeyProfileConfigKey); 
+			transformer.setParameter("authorizedUserKey", userIdentityKeyProfileConfigKey);
 		}
-		
-		
 
 		if (managerSshKeyProfileConfigKey != null) {
 			transformer.setParameter("keyType", "KNOWN_HOST_KEYS");

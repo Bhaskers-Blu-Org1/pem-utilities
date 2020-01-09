@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Partner partnerUniqueId="%s" partnerKey="%s"
+    userId="user01@%s.com" firstName="Tyrone" lastName="Masters"
+    officePhone="9999999999" mobilePhone="9999999999" nameOfCompany="%s"
+    streetAddress="25th Avenue" city="City 25" country="US" state="CA"
+    zipCode="9999" headOfficePhone="9999999999" substatus="NOT_INVITED">
+    <status code="APPROVED" display="Active" />
+</Partner>

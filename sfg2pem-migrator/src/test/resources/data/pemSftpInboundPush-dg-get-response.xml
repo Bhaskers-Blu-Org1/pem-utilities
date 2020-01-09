@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<SftpInboundPushs>
+	<SftpInboundPush configurationVersion="1.0"
+		resourceType="SFTP" sponsorKey="%s" sftpInboundPushKey="%s">
+		<status code="NEW" display="New" />
+		<isDefaultVersion code="Y" display="Yes" />
+		<configurationId name="%s"
+			profileConfigurationKey="%s" />
+		<configurationTypes>
+			<SftpInboundPushType host="localhost" port="3456"
+				sftpInboundPushTypeKey="4271a636-60fc-4758-bb8a-15840f7c8ff4">
+				<compression code="NONE" display="None" />
+				<type code="PROD" display="Production" />
+				<connectionType code="ACTIVE" display="Active" />
+				<preferredAuthenticationType
+					code="PASSWORD" display="Password" />
+				<preferredCypher code="AES128-CBC"
+					display="AES128-CBC" />
+				<preferredMac code="HMAC-SHA1" display="HMAC-SHA1" />
+			</SftpInboundPushType>
+			<SftpInboundPushType host="localhost" port="3457"
+				sftpInboundPushTypeKey="5b162ec9-63ac-4af6-bdd1-6d66759fb90e">
+				<compression code="NONE" display="None" />
+				<type code="TEST" display="Test" />
+				<connectionType code="ACTIVE" display="Active" />
+				<preferredAuthenticationType
+					code="PASSWORD" display="Password" />
+				<preferredCypher code="AES128-CBC"
+					display="AES128-CBC" />
+				<preferredMac code="HMAC-SHA1" display="HMAC-SHA1" />
+			</SftpInboundPushType>
+		</configurationTypes>
+	</SftpInboundPush>
+</SftpInboundPushs>

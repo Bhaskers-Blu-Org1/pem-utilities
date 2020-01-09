@@ -17,6 +17,7 @@ import org.apache.commons.io.FilenameUtils;
 import com.ibm.pem.utilities.sfg2pem.Constants;
 import com.ibm.pem.utilities.sfg2pem.ValidationException;
 import com.ibm.pem.utilities.util.CreateFileUtil;
+import com.ibm.pem.utilities.util.ResourceFactory;
 
 public class Configuration {
 
@@ -38,6 +39,16 @@ public class Configuration {
 	 */
 	private static final String SFG_TEST_API_URL = "{SFG.TEST.PROTOCOL}://{SFG.TEST.HOST_NAME}{:SFG.TEST.PORT}/{SFG.TEST.CONTEXT_URI}/";
 
+	public static final String OUTPUT_FILE_DIRECTORY = "Output_File_Directory";
+
+	public static final String XSLT_DIR = "xsltDir";
+
+	public static final String SFG_PARTNER_DATA_FILE_NAME_TEST = "SFGToPEMMigration.SFGPartnerDataFileName.Test";
+
+	public static final String SFG_PARTNER_DATA_FILE_NAME_PROD = "SFGToPEMMigration.SFGPartnerDataFileName.Prod";
+
+	public static final String PEM_PARTNER_BULK_UPLOAD_REPORT_FILE = "ImportSFGPartnerDataToPEM.input.pemPartnerBulkUploadFile";
+
 	private String protocol;
 	private String contextURI;
 
@@ -48,8 +59,6 @@ public class Configuration {
 	private String prPort;
 
 	private String prRestURL;
-	private String prUserName;
-	private char prPassword[];
 
 	private String sfgProdHost;
 	private String sfgProdPort;
@@ -80,6 +89,7 @@ public class Configuration {
 	private Properties props;
 
 	private String installDirectory;
+	private String xsltDirectory;
 	private File outputFile;
 	private String outputFileDir;
 
@@ -91,9 +101,35 @@ public class Configuration {
 	private String pemPartnerBulkUploadInputFileName;
 	private String pemPartnerBulkUploadOutputFileName;
 
+	private ResourceFactory resourceFactory;
+
+	public Configuration() {
+		this(new ResourceFactory());
+	}
+
+	/**
+	 * This method is meant to support unit testing only.
+	 * 
+	 * @internal
+	 */
+	public Configuration(ResourceFactory resourceFactory) {
+		this.resourceFactory = resourceFactory;
+	}
+
+	public Configuration load(Properties properties) throws ValidationException, IOException {
+		props = new Properties();
+		props.putAll(properties);
+		installDirectory = getValue("installDirectory", true);
+		load();
+		return this;
+	}
+
 	public void load(String configFile) throws Exception {
 		loadProps(configFile);
+		load();
+	}
 
+	public void load() throws ValidationException, IOException {
 		mode = getValue("MODE", true);
 		validateMode();
 
@@ -168,11 +204,10 @@ public class Configuration {
 		delimiter = getValue("DELIMITER", true);
 		validateDelimiter();
 
-		outputFileDir = getValue("Output_File_Directory", true);
+		outputFileDir = getValue(OUTPUT_FILE_DIRECTORY, true);
 
 		if (getMode().equals(Constants.MODE_IMPORT_SFG_PARTNER_DATA_TO_PEM)) {
-			pemPartnerBulkUploadOutputFileName = getValue("ImportSFGPartnerDataToPEM.input.pemPartnerBulkUploadFile",
-					false);
+			pemPartnerBulkUploadOutputFileName = getValue(PEM_PARTNER_BULK_UPLOAD_REPORT_FILE, false);
 			pemPartnerBulkUploadInputFileName = getValue("ImportSFGPartnerDataToPEM.output.pemPartnerBulkUploadFile",
 					true);
 			validateCsvFileExtension(pemPartnerBulkUploadInputFileName);
@@ -183,10 +218,10 @@ public class Configuration {
 
 		if (getMode().equals(Constants.MODE_EXTRACT_SFG_PARTNER_DATA)
 				|| getMode().equals(Constants.MODE_IMPORT_SFG_PARTNER_DATA_TO_PEM)) {
-			prodSFGPartnerDataFileName = getValue("SFGToPEMMigration.SFGPartnerDataFileName.Prod", true);
+			prodSFGPartnerDataFileName = getValue(SFG_PARTNER_DATA_FILE_NAME_PROD, true);
 			validateCsvFileExtension(prodSFGPartnerDataFileName);
 
-			testSFGPartnerDataFileName = getValue("SFGToPEMMigration.SFGPartnerDataFileName.Test", true);
+			testSFGPartnerDataFileName = getValue(SFG_PARTNER_DATA_FILE_NAME_TEST, true);
 			validateCsvFileExtension(testSFGPartnerDataFileName);
 		}
 
@@ -199,6 +234,11 @@ public class Configuration {
 			if (!pemPartnerBulkUploadInputFile.exists()) {
 				pemPartnerBulkUploadInputFile.createNewFile();
 			}
+		}
+
+		xsltDirectory = getValue(XSLT_DIR, false);
+		if (xsltDirectory == null || xsltDirectory.isEmpty()) {
+			xsltDirectory = installDirectory + "/xslt";
 		}
 	}
 
@@ -346,22 +386,6 @@ public class Configuration {
 
 	public void setPrRestURL(String prRestURL) {
 		this.prRestURL = prRestURL;
-	}
-
-	public String getPrUserName() {
-		return prUserName;
-	}
-
-	public void setPrUserName(String prUserName) {
-		this.prUserName = prUserName;
-	}
-
-	public char[] getPrPassword() {
-		return prPassword;
-	}
-
-	public void setPrPassword(char[] prPassword) {
-		this.prPassword = prPassword;
 	}
 
 	public String getSfgProdHost() {
@@ -536,6 +560,10 @@ public class Configuration {
 		return installDirectory;
 	}
 
+	public String getXsltDirectory() {
+		return xsltDirectory;
+	}
+
 	public File getOutputFile() {
 		return outputFile;
 	}
@@ -574,6 +602,10 @@ public class Configuration {
 
 	public String getPemPartnerBulkUploadOutputFileName() {
 		return pemPartnerBulkUploadOutputFileName;
+	}
+
+	public ResourceFactory getResourceFactory() {
+		return resourceFactory;
 	}
 
 }

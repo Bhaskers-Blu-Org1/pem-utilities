@@ -1,0 +1,9 @@
+Type~Partner Name~SFG Partner Key~PEM Partner Key~Sponsor Division Key~PR System Ref~User Name~Given Name~Last Name~Email Address~Phone~City~Community~Is Listening Producer~Is Listening Consumer~isInitiatingProducer~isInitiatingConsumer~InboundPush Profile Configuration Key~OutboundPull Profile Configuration Key~HostIdentityKey Profile Configuration Key~AuthorizedUserKey Profile Configuration Key~Processing Status
+PROD~partner01~partner01~~~~partner01~partner01~partner01~user1@partner01.com~9999999999~partner01~community1~N~Y~Y~N~~~~~Not Processed
+PROD~partner02~partner02~pemPartner02~~~partner02~partner02~partner02~user1@partner02.com~9999999999~partner02~community1~Y~Y~N~N~~~~~Not Processed
+PROD~partner03~partner03~pemPartner03~pemSponsorDivKey1~~partner03~partner03~partner03~user1@partner03.com~9999999999~partner03~community1~Y~Y~N~N~~~~~Not Processed
+PROD~partner04~partner04~pemPartner04~pemSponsorDivKey1~systemRef04~partner04~partner04~partner04~user1@partner04.com~9999999999~partner04~community1~Y~Y~N~N~~~~~Not Processed
+PROD~partner05~partner05~pemPartner05~pemSponsorDivKey1~systemRef05~partner05~partner05~partner05~user1@partner05.com~9999999999~partner05~community1~Y~Y~N~N~~~~~Not Processed
+PROD~partner06~partner06~pemPartner06~pemSponsorDivKey1~systemRef06~partner06~partner06~partner06~user1@partner06.com~9999999999~partner06~community1~Y~Y~N~N~~~~~Bad Status
+PROD~partner07~~pemPartner07~pemSponsorDivKey1~systemRef07~partner07~partner07~partner07~user1@partner07.com~9999999999~partner07~community1~Y~Y~N~N~~~~~Not Processed
+PROD~partner08~partner08~pemPartner08~pemSponsorDivKey1~systemRef08~partner08~partner08~partner08~user1@partner08.com~9999999999~partner08~community1~N~Y~Y~N~~~~~Ignored

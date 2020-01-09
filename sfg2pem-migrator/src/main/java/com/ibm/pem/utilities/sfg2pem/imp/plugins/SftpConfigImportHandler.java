@@ -28,18 +28,19 @@ import org.xml.sax.SAXException;
 
 import com.ibm.pem.utilities.Configuration;
 import com.ibm.pem.utilities.sfg2pem.ApiInvocationException;
+import com.ibm.pem.utilities.sfg2pem.Constants;
 import com.ibm.pem.utilities.sfg2pem.ImportException;
 import com.ibm.pem.utilities.sfg2pem.ValidationException;
 import com.ibm.pem.utilities.sfg2pem.imp.ImportHelper;
 import com.ibm.pem.utilities.sfg2pem.imp.PartnerInfo;
-import com.ibm.pem.utilities.sfg2pem.imp.PrConfigurationImportHandler;
 import com.ibm.pem.utilities.sfg2pem.imp.PartnerInfo.ProcessingStatus;
+import com.ibm.pem.utilities.sfg2pem.imp.PrConfigurationImportHandler;
 import com.ibm.pem.utilities.sfg2pem.imp.PrConfigurationProcessor.ConfigInfo;
 import com.ibm.pem.utilities.sfg2pem.imp.plugins.SftpConfigImportProcessor.SftpConfigInfo;
 import com.ibm.pem.utilities.sfg2pem.imp.plugins.SystemImportProcessor.SystemConfigInfo;
 import com.ibm.pem.utilities.sfg2pem.imp.plugins.resources.SftpResourceHelper;
 import com.ibm.pem.utilities.util.ApiResponse;
-import com.ibm.pem.utilities.util.HttpClientUtil;
+import com.ibm.pem.utilities.util.DOMUtils;
 
 public class SftpConfigImportHandler extends PrConfigurationImportHandler {
 
@@ -190,7 +191,7 @@ public class SftpConfigImportHandler extends PrConfigurationImportHandler {
 			throws ApiInvocationException, ValidationException, ImportException {
 		boolean containsMultipleAuk = true;
 		Map<String, String> headers = new HashMap<String, String>();
-		headers.put("Accept", "application/xml");
+		headers.put(Constants.HEADER_ACCEPT, Constants.MEDIA_TYPE_APPLICATION_XML);
 		try {
 			ApiResponse prodApiOutput = getProdAUK(partnerInfo.getProdSfgUserName(), headers);
 			ApiResponse testApiOutput = getTestAUK(partnerInfo.getTestSfgUserName(), headers);
@@ -218,13 +219,14 @@ public class SftpConfigImportHandler extends PrConfigurationImportHandler {
 	private ApiResponse getProdAUK(String sfgProdPartnerGivenName, Map<String, String> headers)
 			throws HttpException, IOException, URISyntaxException, KeyManagementException, NoSuchAlgorithmException,
 			CertificateException, KeyStoreException, ValidationException {
-		String url = getConfig().getSfgProdRestURL();
+		Configuration config = getConfig();
+		String url = config.getSfgProdRestURL();
 		url += "svc/useraccounts/" + sfgProdPartnerGivenName;
 		if (LOG.isInfoEnabled()) {
 			LOG.info("Running API: GET " + url);
 		}
-		ApiResponse apiOutput = HttpClientUtil.doGet(url, headers, getConfig().getSfgProdUserName(),
-				getConfig().getSfgProdPassword(), getConfig(), getConfig().getSfgProdHost());
+		ApiResponse apiOutput = config.getResourceFactory().createHttpClientInstance().doGet(url, headers,
+				config.getSfgProdUserName(), config.getSfgProdPassword(), config, config.getSfgProdHost());
 		if (LOG.isInfoEnabled()) {
 			LOG.info("Response:\n" + apiOutput.getStatusCode() + apiOutput.getResponse());
 		}
@@ -234,13 +236,14 @@ public class SftpConfigImportHandler extends PrConfigurationImportHandler {
 	private ApiResponse getTestAUK(String sfgTestPartnerGivenName, Map<String, String> headers)
 			throws HttpException, IOException, URISyntaxException, KeyManagementException, NoSuchAlgorithmException,
 			CertificateException, KeyStoreException, ValidationException {
-		String url = getConfig().getSfgTestRestURL();
+		Configuration config = getConfig();
+		String url = config.getSfgTestRestURL();
 		url += "svc/useraccounts/" + sfgTestPartnerGivenName;
 		if (LOG.isInfoEnabled()) {
 			LOG.info("Running API: GET " + url);
 		}
-		ApiResponse apiOutput = HttpClientUtil.doGet(url, headers, getConfig().getSfgTestUserName(),
-				getConfig().getSfgTestPassword(), getConfig(), getConfig().getSfgTestHost());
+		ApiResponse apiOutput = config.getResourceFactory().createHttpClientInstance().doGet(url, headers,
+				config.getSfgTestUserName(), config.getSfgTestPassword(), config, config.getSfgTestHost());
 		if (LOG.isInfoEnabled()) {
 			LOG.info("Response:\n" + apiOutput.getStatusCode() + apiOutput.getResponse());
 		}
@@ -289,10 +292,10 @@ public class SftpConfigImportHandler extends PrConfigurationImportHandler {
 			ApiResponse apiResponse = SftpResourceHelper.getResourceFromPR(getConfig(), url);
 			DocumentBuilder builder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
 			doc = builder.parse(new InputSource(new StringReader(apiResponse.getResponse())));
-			if(SftpResourceHelper.getAttributeValueByTagName(doc, "System", "systemKey") != null) {
+			if (DOMUtils.getAttributeValueByTagName(doc, "System", "systemKey") != null) {
 				if (SftpResourceHelper.isAttributeValueExist(doc, "resourceType", CODE, "SFTP")) {
 					if ("PROD_CFG_PVRN_COMPLETE"
-							.equalsIgnoreCase(SftpResourceHelper.getAttributeValueByTagName(doc, "status", CODE))) {
+							.equalsIgnoreCase(DOMUtils.getAttributeValueByTagName(doc, "status", CODE))) {
 						throw new ValidationException(ProcessingStatus.IGNORED.getCode(),
 								"ignored, System created and in provision to production complete status");
 					} else if (SftpResourceHelper.isAttributeValueExist(doc, "SystemTypeExtn", "extensionName",
@@ -377,8 +380,7 @@ public class SftpConfigImportHandler extends PrConfigurationImportHandler {
 	}
 
 	private static String getSftpRemoteProfileKey(Document sfgPartnerData) {
-		return SftpResourceHelper.getAttributeValueByTagName(sfgPartnerData, getSftpTagName(sfgPartnerData),
-				"remoteProfile");
+		return DOMUtils.getAttributeValueByTagName(sfgPartnerData, getSftpTagName(sfgPartnerData), "remoteProfile");
 	}
 
 	private static String getSftpTagName(Document doc) {
@@ -392,14 +394,14 @@ public class SftpConfigImportHandler extends PrConfigurationImportHandler {
 	}
 
 	private static String getProdPreferredAuthenticationType(Document sfgPartner) {
-		return SftpResourceHelper.getAttributeValueByTagName(sfgPartner, "preferredAuthenticationType", CODE);
+		return DOMUtils.getAttributeValueByTagName(sfgPartner, "preferredAuthenticationType", CODE);
 	}
 
 	private static boolean doesRemoteProfileHasKnownHostKey(SftpConfigInfo configInfo) {
-		String prodKnownHostKey = SftpResourceHelper.getAttributeValueByTagName(configInfo.getProdRemoteProfileDoc(),
+		String prodKnownHostKey = DOMUtils.getAttributeValueByTagName(configInfo.getProdRemoteProfileDoc(),
 				"KnownHostKeyName", "name");
 
-		String testKnownHostKey = SftpResourceHelper.getAttributeValueByTagName(configInfo.getTestRemoteProfileDoc(),
+		String testKnownHostKey = DOMUtils.getAttributeValueByTagName(configInfo.getTestRemoteProfileDoc(),
 				"KnownHostKeyName", "name");
 
 		if (prodKnownHostKey != null && testKnownHostKey != null) {
@@ -409,10 +411,10 @@ public class SftpConfigImportHandler extends PrConfigurationImportHandler {
 	}
 
 	private static boolean doesRemoteProfileHasRemoteUser(SftpConfigInfo configInfo) {
-		String prodRemoteUser = SftpResourceHelper.getAttributeValueByTagName(configInfo.getProdRemoteProfileDoc(),
+		String prodRemoteUser = DOMUtils.getAttributeValueByTagName(configInfo.getProdRemoteProfileDoc(),
 				"SSHRemoteProfile", "remoteUser");
 
-		String testRemoteUser = SftpResourceHelper.getAttributeValueByTagName(configInfo.getTestRemoteProfileDoc(),
+		String testRemoteUser = DOMUtils.getAttributeValueByTagName(configInfo.getTestRemoteProfileDoc(),
 				"SSHRemoteProfile", "remoteUser");
 
 		if (prodRemoteUser != null && testRemoteUser != null) {

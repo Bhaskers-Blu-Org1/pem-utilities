@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ProfileConfiguration profileConfigurationKey="%s"
+    name="%s" sponsorKey="%s">
+    <resourceType code="%s" />
+    <subResourceType code="%s" />
+    <partner partnerKey="%s" />
+    <owningDivisions>
+        <SubResourceDivisionRef>
+            <sponsorDivisionKey divisionKey="%s" />
+            <partnerDivisionKey divisionKey="%s" />
+        </SubResourceDivisionRef>
+    </owningDivisions>
+    <serverType code="PR" display="Partner Remote" />
+</ProfileConfiguration>

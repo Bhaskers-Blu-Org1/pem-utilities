@@ -25,6 +25,7 @@ import com.ibm.pem.utilities.Configuration;
 import com.ibm.pem.utilities.sfg2pem.Constants;
 import com.ibm.pem.utilities.sfg2pem.imp.PartnerInfo;
 import com.ibm.pem.utilities.sfg2pem.imp.plugins.SystemImportProcessor.SystemConfigInfo;
+import com.ibm.pem.utilities.util.DOMUtils;
 
 public class SystemXSLT {
 
@@ -33,17 +34,17 @@ public class SystemXSLT {
 
 	public String getCommunityName(Document sfgPartnerDoc)
 			throws ParserConfigurationException, SAXException, IOException {
-		return SftpResourceHelper.getAttributeValueByTagName(sfgPartnerDoc, "TradingPartner", "community");
+		return DOMUtils.getAttributeValueByTagName(sfgPartnerDoc, "TradingPartner", "community");
 	}
 
 	public String getSfgPartnerName(Document sfgPartnerDoc)
 			throws ParserConfigurationException, SAXException, IOException {
-		return SftpResourceHelper.getAttributeValueByTagName(sfgPartnerDoc, "TradingPartner", "partnerName");
+		return DOMUtils.getAttributeValueByTagName(sfgPartnerDoc, "TradingPartner", "partnerName");
 	}
 
 	public String getAuthenticationType(Document sfgPartnerDoc)
 			throws ParserConfigurationException, SAXException, IOException {
-		return SftpResourceHelper.getAttributeValueByTagName(sfgPartnerDoc, "authenticationType", "code");
+		return DOMUtils.getAttributeValueByTagName(sfgPartnerDoc, "authenticationType", "code");
 	}
 
 	public Document createSystem(Configuration config, SystemConfigInfo configInfo, PartnerInfo partnerInfo,
@@ -52,7 +53,7 @@ public class SystemXSLT {
 		StringReader dummyInput = new StringReader("<a>pem</a>");
 		StringWriter outPutXml = new StringWriter();
 		TransformerFactory tFactory = TransformerFactory.newInstance();
-		File inputXSLT = new File(config.getInstallDirectory() + "/xslt/system.xsl").getAbsoluteFile();
+		File inputXSLT = new File(config.getXsltDirectory() + "/system.xsl").getAbsoluteFile();
 		Transformer transformer = tFactory.newTransformer(new javax.xml.transform.stream.StreamSource(inputXSLT));
 		transformer.setParameter("configurationId", configurationId);
 		transformer.setParameter("testType", Constants.TEST);

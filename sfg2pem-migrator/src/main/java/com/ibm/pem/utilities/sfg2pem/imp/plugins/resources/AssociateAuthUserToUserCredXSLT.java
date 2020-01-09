@@ -30,7 +30,7 @@ public class AssociateAuthUserToUserCredXSLT {
 		StringReader dummyInput = new StringReader("<a>pem</a>");
 		StringWriter outPutXml = new StringWriter();
 		TransformerFactory tFactory = TransformerFactory.newInstance();
-		File inputXSLT = new File(config.getInstallDirectory() + "/xslt/associateAuthUser.xsl").getAbsoluteFile();
+		File inputXSLT = new File(config.getXsltDirectory() + "/associateAuthUser.xsl").getAbsoluteFile();
 		Transformer transformer = tFactory.newTransformer(new javax.xml.transform.stream.StreamSource(inputXSLT));
 		transformer.setParameter("authorizedUserProfileConfigKey", sshAuthUserKeyProfileConfigKey);
 		transformer.transform(new javax.xml.transform.stream.StreamSource(dummyInput),

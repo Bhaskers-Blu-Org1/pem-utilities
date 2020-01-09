@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<SSHRemoteProfile _id="%s"
+	profileId="46116116f0df7121anode1" profileName="%s"
+	remoteHost="10.15.100.64" remotePort="50139" remoteUser="admin">
+	<knownHostKeys>
+		<KnownHostKeyName name="%s" />
+	</knownHostKeys>
+	<preferredAuthenticationType
+		code="PASSWORD" display="Password" />
+	<compression code="NONE" display="NONE" />
+	<preferredCipher code="AES128-CBC" display="AES128-CBC" />
+	<preferredMacAlgorithm code="HMAC-SHA1"
+		display="HMAC-SHA1" />
+</SSHRemoteProfile>

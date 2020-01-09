@@ -7,7 +7,10 @@ package com.ibm.pem.utilities.sfg2pem;
 
 public class Constants {
 
+	public static final String HEADER_ACCEPT = "Accept";
+	public static final String HEADER_CONTENT_TYPE = "Content-Type";
 	public static final String MEDIA_TYPE_APPLICATION_XML = "application/xml";
+	public static final String MEDIA_TYPE_APPLICATION_JSON = "application/json";
 
 	public static final String MODE_IMPORT_SFG_PARTNER_DATA_TO_PEM = "ImportSFGPartnerDataToPEM";
 	public static final String MODE_EXTRACT_SFG_PARTNER_DATA = "ExtractSFGPartnerData";

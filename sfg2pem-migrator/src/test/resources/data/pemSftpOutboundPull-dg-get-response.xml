@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<SftpOutboundPulls>
+	<SftpOutboundPull configurationVersion="1.0"
+		resourceType="SFTP" sponsorKey="%s" sftpOutboundPullKey="%s">
+		<status code="NEW" display="New" />
+		<isDefaultVersion code="Y" display="Yes" />
+		<configurationId name="%s"
+			profileConfigurationKey="%s" />
+		<configurationTypes>
+			<SftpOutboundPullType host="localhost"
+				port="3456"
+				sftpOutboundPullTypeKey="0026e4c7-2473-4b43-b6c0-0887fc832ce8">
+				<compression code="NONE" display="None" />
+				<type code="PROD" display="Production" />
+				<connectionType code="ACTIVE" display="Active" />
+				<preferredAuthenticationType
+					code="PASSWORD" display="Password" />
+				<preferredCypher code="AES128-CBC"
+					display="AES128-CBC" />
+				<preferredMac code="HMAC-SHA1" display="HMAC-SHA1" />
+			</SftpOutboundPullType>
+			<SftpOutboundPullType host="localhost"
+				port="3457"
+				sftpOutboundPullTypeKey="4bf046cb-7302-4e0c-95ec-01a1672c9d38">
+				<compression code="NONE" display="None" />
+				<type code="TEST" display="Test" />
+				<connectionType code="ACTIVE" display="Active" />
+				<preferredAuthenticationType
+					code="PASSWORD" display="Password" />
+				<preferredCypher code="AES128-CBC"
+					display="AES128-CBC" />
+				<preferredMac code="HMAC-SHA1" display="HMAC-SHA1" />
+			</SftpOutboundPullType>
+		</configurationTypes>
+	</SftpOutboundPull>
+</SftpOutboundPulls>

@@ -14,14 +14,11 @@ import java.security.KeyManagementException;
 import java.security.KeyStoreException;
 import java.security.NoSuchAlgorithmException;
 import java.security.cert.CertificateException;
-import java.security.cert.X509Certificate;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
 
 import javax.net.ssl.SSLContext;
-import javax.net.ssl.TrustManager;
-import javax.net.ssl.X509TrustManager;
 
 import org.apache.http.HttpException;
 import org.apache.http.HttpHost;
@@ -64,12 +61,7 @@ public class HttpClientUtil {
 	public static final int BUFFER_SIZE = 1024;
 	public static final int MAX_RESPONSE_SIZE = 10240;
 
-	/*
-	 * doPost method which posts the payload xml each partner record to the create
-	 * partner rest api url
-	 * 
-	 */
-	public static ApiResponse doPost(String url, Map<?, ?> headers, String payload, String userName, char[] password,
+	public ApiResponse doPost(String url, Map<?, ?> headers, String payload, String userName, char[] password,
 			Configuration config, String host)
 			throws URISyntaxException, HttpException, IOException, KeyManagementException, NoSuchAlgorithmException,
 			CertificateException, KeyStoreException, ValidationException {
@@ -105,8 +97,8 @@ public class HttpClientUtil {
 		return buildApiResponse(response);
 	}
 
-	public static ApiResponse doGet(final String url, final Map<String, String> headers, String userName,
-			char[] password, Configuration config, String host)
+	public ApiResponse doGet(final String url, final Map<String, String> headers, String userName, char[] password,
+			Configuration config, String host)
 			throws HttpException, IOException, URISyntaxException, KeyManagementException, NoSuchAlgorithmException,
 			CertificateException, KeyStoreException, ValidationException {
 		HttpGet httpget = new HttpGet(url);
@@ -161,25 +153,8 @@ public class HttpClientUtil {
 
 	private static HttpClient createHttpClient(Configuration config) throws KeyManagementException,
 			NoSuchAlgorithmException, CertificateException, IOException, KeyStoreException {
-		TrustManager[] trustMgrs = new TrustManager[] { new X509TrustManager() {
-			@Override
-			public X509Certificate[] getAcceptedIssuers() {
-				return null;
-			}
-
-			@Override
-			public void checkClientTrusted(X509Certificate[] certs, String authType) {
-			}
-
-			@Override
-			public void checkServerTrusted(X509Certificate[] certs, String authType) {
-
-			}
-
-		} };
-
 		SSLContext sslctx = SSLContexts.custom().useTLS().build();
-		sslctx.init(null, trustMgrs, null);
+		sslctx.init(null, null, null);
 		// The following code should allow TLS 1.0,1.1,1.2 connections
 		SSLConnectionSocketFactory httpssf = new SSLConnectionSocketFactory(sslctx,
 				new String[] { "TLSv1", "TLSv1.1", "TLSv1.2" }, null, new AllowAllHostnameVerifier());
@@ -216,7 +191,6 @@ public class HttpClientUtil {
 		HttpHost proxy = getProxyHost(config);
 		if (proxy != null) {
 			httpClient.setProxy(proxy);
-			// httpClient.setRoutePlanner(new ProxyRoutePlanner(proxy));
 		}
 
 		httpClient.setConnectionManager(cm);

@@ -19,6 +19,7 @@ import com.ibm.pem.utilities.sfg2pem.imp.PartnerInfo;
 import com.ibm.pem.utilities.sfg2pem.imp.PrConfigurationProcessor;
 import com.ibm.pem.utilities.sfg2pem.imp.plugins.resources.SftpResourceHelper;
 import com.ibm.pem.utilities.sfg2pem.imp.plugins.resources.SystemXSLT;
+import com.ibm.pem.utilities.util.DOMUtils;
 
 public class SystemImportProcessor extends PrConfigurationProcessor {
 
@@ -35,7 +36,7 @@ public class SystemImportProcessor extends PrConfigurationProcessor {
 		private String sftpOutPullProfileConfigKey;
 		private String sshAuthUserKeyProfileConfigKey;
 		private String hostIdentityKeyProfileConfig;
-		
+
 		public String getSshAuthUserKeyProfileConfigKey() {
 			return sshAuthUserKeyProfileConfigKey;
 		}
@@ -53,7 +54,7 @@ public class SystemImportProcessor extends PrConfigurationProcessor {
 			this.sftpInbPushProfileConfigKey = sftpInbPushProfileConfigKey;
 			return this;
 		}
-	
+
 		public String getSftpOutPullProfileConfigKey() {
 			return sftpOutPullProfileConfigKey;
 		}
@@ -147,13 +148,15 @@ public class SystemImportProcessor extends PrConfigurationProcessor {
 				getPartnerInfo().getPemPartnerKey(), profileConfigKey);
 		return SftpResourceHelper.getResourceFromPR(getConfig(), url).getResponse();
 	}
-	
+
 	@Override
 	protected String createConfigResource(String profileConfigKey) throws ImportException {
 		try {
-			String requestXml = SftpResourceHelper.createXml(new SystemXSLT().createSystem(getConfig(), configInfo, getPartnerInfo(), profileConfigKey));
+			String requestXml = DOMUtils.createXml(
+					new SystemXSLT().createSystem(getConfig(), configInfo, getPartnerInfo(), profileConfigKey));
 
-			return SftpResourceHelper.callCreateApi(getConfig(), requestXml, getConfig().buildPRUrl(CREATE_SYSTEM_API_URL), "systemKey");
+			return SftpResourceHelper.callCreateApi(getConfig(), requestXml,
+					getConfig().buildPRUrl(CREATE_SYSTEM_API_URL), "systemKey");
 		} catch (TransformerException | IOException | ParserConfigurationException | SAXException
 				| ApiInvocationException e) {
 			throw new ImportException(e);

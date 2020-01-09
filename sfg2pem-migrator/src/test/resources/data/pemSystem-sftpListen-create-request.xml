@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<create configurationId="%s">
+    <configurationTypes>
+        <SystemType inbound="y" outbound="y" type="TEST">
+            <extensions>
+                <SystemTypeExtn extensionName="AuthenticationHost"
+                    extensionValue="" />
+                <SystemTypeExtn extensionName="SFGCommunityName"
+                    extensionValue="community1" />
+                <SystemTypeExtn extensionName="PartnerPrefix"
+                    extensionValue="%s" />
+                <SystemTypeExtn extensionName="SFGPartnerKey"
+                    extensionValue="%s" />
+            </extensions>
+            <systemProfileRefs>
+                <SystemProfileRef profileRef="%s"
+                    profileRefName="SFTPIBPullProfileConfig"
+                    profileRefType="SFTP_INB_PULL" />
+                <SystemProfileRef profileRef="%s"
+                    profileRefName="SFTPOBPushProfileConfig"
+                    profileRefType="SFTP_OUT_PUSH" />
+                <SystemProfileRef profileRef="%s"
+                    profileRefName="KnownHostKeyProfileConfig" profileRefType="SSH_KEY" />
+                <SystemProfileRef profileRef="%s"
+                    profileRefName="UserCredProfileConfig" profileRefType="USER_CRED" />
+            </systemProfileRefs>
+        </SystemType>
+        <SystemType inbound="y" outbound="y" type="PROD">
+            <extensions>
+                <SystemTypeExtn extensionName="AuthenticationHost"
+                    extensionValue="" />
+                <SystemTypeExtn extensionName="SFGCommunityName"
+                    extensionValue="community1" />
+                <SystemTypeExtn extensionName="PartnerPrefix"
+                    extensionValue="%s" />
+                <SystemTypeExtn extensionName="SFGPartnerKey"
+                    extensionValue="%s" />
+            </extensions>
+            <systemProfileRefs>
+                <SystemProfileRef profileRef="%s"
+                    profileRefName="SFTPIBPullProfileConfig"
+                    profileRefType="SFTP_INB_PULL" />
+                <SystemProfileRef profileRef="%s"
+                    profileRefName="SFTPOBPushProfileConfig"
+                    profileRefType="SFTP_OUT_PUSH" />
+                <SystemProfileRef profileRef="%s"
+                    profileRefName="KnownHostKeyProfileConfig" profileRefType="SSH_KEY" />
+                <SystemProfileRef profileRef="%s"
+                    profileRefName="UserCredProfileConfig" profileRefType="USER_CRED" />
+            </systemProfileRefs>
+        </SystemType>
+    </configurationTypes>
+</create>

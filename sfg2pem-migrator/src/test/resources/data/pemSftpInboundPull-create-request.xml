@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<create configurationId="%s">
+    <configurationTypes>
+        <SftpInboundPullType characterEncoding=""
+            compression="NONE" directory="" host="10.15.100.64" localPortRange=""
+            noOfRetries="" preferredAuthenticationType="Password"
+            preferredCypher="AES128-CBC" preferredMac="HMAC-SHA1"
+            profileName="%s" remotePort="50139" responseTimeout=""
+            retryInterval="" type="PROD" userCredential="%s">
+            <sshKeys>
+                <SftpInboundPullTypeKey
+                    keyType="KNOWN_HOST_KEYS" sshKey="%s" />
+            </sshKeys>
+        </SftpInboundPullType>
+        <SftpInboundPullType characterEncoding=""
+            compression="NONE" directory="" host="10.15.100.64" localPortRange=""
+            noOfRetries="" preferredAuthenticationType="Password"
+            preferredCypher="AES128-CBC" preferredMac="HMAC-SHA1"
+            profileName="%s" remotePort="50139" responseTimeout=""
+            retryInterval="" type="TEST" userCredential="%s">
+            <sshKeys>
+                <SftpInboundPullTypeKey
+                    keyType="KNOWN_HOST_KEYS" sshKey="%s" />
+            </sshKeys>
+        </SftpInboundPullType>
+    </configurationTypes>
+</create>

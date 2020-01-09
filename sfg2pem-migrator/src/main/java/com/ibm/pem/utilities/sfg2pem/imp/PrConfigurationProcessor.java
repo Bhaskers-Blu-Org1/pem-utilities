@@ -19,6 +19,7 @@ import com.ibm.pem.utilities.sfg2pem.Constants;
 import com.ibm.pem.utilities.sfg2pem.ImportException;
 import com.ibm.pem.utilities.sfg2pem.imp.plugins.resources.ProfileConfigurationXSLT;
 import com.ibm.pem.utilities.sfg2pem.imp.plugins.resources.SftpResourceHelper;
+import com.ibm.pem.utilities.util.DOMUtils;
 
 public abstract class PrConfigurationProcessor {
 
@@ -85,7 +86,7 @@ public abstract class PrConfigurationProcessor {
 				throw new ImportException(e);
 			}
 
-			String resourceKey = SftpResourceHelper.getAttributeValueByTagName(apiResponse, getResourceKeyTagName(),
+			String resourceKey = DOMUtils.getAttributeValueByTagName(apiResponse, getResourceKeyTagName(),
 					getResourceKeyAttributeName());
 			
 			if (!partnerInfo.isRemoteProfileExists() && getProfileConfigKey() != null && resourceKey == null) {
@@ -107,7 +108,7 @@ public abstract class PrConfigurationProcessor {
 			resourceKey = createConfigResource(profileConfigKey);
 			markAsComplete = true;
 		} else {
-			String resourceStatus = SftpResourceHelper.getAttributeValueByTagName(apiResponse, "status", "code");
+			String resourceStatus = DOMUtils.getAttributeValueByTagName(apiResponse, "status", "code");
 			if (resourceStatus.equalsIgnoreCase("NEW")) {
 				markAsComplete = true;
 			} else if (resourceStatus.equalsIgnoreCase("PROD_CFG_PVRN_COMPLETE")) {
@@ -134,7 +135,7 @@ public abstract class PrConfigurationProcessor {
 	}
 
 	protected String getResourceName() {
-		return SftpResourceHelper.getAttributeValueByTagName(partnerInfo.getProdSfgPartnerDoc(), "TradingPartner",
+		return DOMUtils.getAttributeValueByTagName(partnerInfo.getProdSfgPartnerDoc(), "TradingPartner",
 				"partnerName") + "-" + getResourceNamePostfix();
 	}
 
@@ -144,7 +145,7 @@ public abstract class PrConfigurationProcessor {
 		String url = getProfileConfigurationURL(resourceType, subResourceType, resourceName);
 		String apiResponse = SftpResourceHelper.getResourceFromPR(getConfig(), url).getResponse();
 		try {
-			configurationId = SftpResourceHelper.getAttributeValueByTagName(apiResponse, "ProfileConfiguration",
+			configurationId = DOMUtils.getAttributeValueByTagName(apiResponse, "ProfileConfiguration",
 					"profileConfigurationKey");
 		} catch (ParserConfigurationException | SAXException | IOException e) {
 			throw new ImportException(e);
@@ -162,7 +163,7 @@ public abstract class PrConfigurationProcessor {
 			throws ApiInvocationException, ImportException {
 		String configurationId = null;
 		try {
-			String requestXML = SftpResourceHelper.createXml(new ProfileConfigurationXSLT().createProfileConfiguration(
+			String requestXML = DOMUtils.createXml(new ProfileConfigurationXSLT().createProfileConfiguration(
 					config, resourceName, resourceType, subResourceType, Constants.SERVER_TYPE_PR,
 					partnerInfo.getPemPartnerKey(), partnerInfo.getSponsorDivisionKey(), partnerInfo.getAuthUserKeySGProfileConfig()));
 			String createProfileConfigRequest = requestXML;

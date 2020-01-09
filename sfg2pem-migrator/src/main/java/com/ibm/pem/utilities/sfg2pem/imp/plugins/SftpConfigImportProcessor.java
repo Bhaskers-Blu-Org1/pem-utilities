@@ -20,6 +20,7 @@ import com.ibm.pem.utilities.sfg2pem.imp.PartnerInfo;
 import com.ibm.pem.utilities.sfg2pem.imp.PrConfigurationProcessor;
 import com.ibm.pem.utilities.sfg2pem.imp.plugins.resources.SftpResourceHelper;
 import com.ibm.pem.utilities.sfg2pem.imp.plugins.resources.SftpXSLT;
+import com.ibm.pem.utilities.util.DOMUtils;
 
 public abstract class SftpConfigImportProcessor extends PrConfigurationProcessor {
 
@@ -102,9 +103,9 @@ public abstract class SftpConfigImportProcessor extends PrConfigurationProcessor
 					configInfo.getTestRemoteProfileDoc(), profileConfigKey,
 					configInfo.getManagedSshKeyProfileConfigKey(), configInfo.getUserIdentityKeyProfileConfigKey(),
 					configInfo.getUserCredentialProfileConfigKey(), getSubResourceType());
-			String requestXml = SftpResourceHelper.createXml(sftpXML);
-			return SftpResourceHelper.callCreateApi(getConfig(), requestXml, getConfig().buildPRUrl(getConfigResourceURL()),
-					getResourceKeyAttributeName());
+			String requestXml = DOMUtils.createXml(sftpXML);
+			return SftpResourceHelper.callCreateApi(getConfig(), requestXml,
+					getConfig().buildPRUrl(getConfigResourceURL()), getResourceKeyAttributeName());
 		} catch (TransformerException | IOException | ParserConfigurationException | SAXException
 				| ApiInvocationException e) {
 			throw new ImportException(e);

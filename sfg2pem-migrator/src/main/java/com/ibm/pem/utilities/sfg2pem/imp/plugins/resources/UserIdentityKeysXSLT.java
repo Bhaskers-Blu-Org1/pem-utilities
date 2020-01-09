@@ -32,7 +32,7 @@ public class UserIdentityKeysXSLT {
 		StringReader dummyInput = new StringReader("<a>pem</a>");
 		StringWriter outPutXml = new StringWriter();
 		TransformerFactory tFactory = TransformerFactory.newInstance();
-		File inputXSLT = new File(config.getInstallDirectory() + "/xslt/userIdentityKey.xsl").getAbsoluteFile();
+		File inputXSLT = new File(config.getXsltDirectory() + "/userIdentityKey.xsl").getAbsoluteFile();
 		Transformer transformer = tFactory.newTransformer(new javax.xml.transform.stream.StreamSource(inputXSLT));
 		transformer.setParameter("configurationId", userIdentityKeyProfileConfig);
 		transformer.setParameter("prodType", Constants.PROD);

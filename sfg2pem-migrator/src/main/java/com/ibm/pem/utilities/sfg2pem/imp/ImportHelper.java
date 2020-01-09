@@ -6,8 +6,6 @@
 package com.ibm.pem.utilities.sfg2pem.imp;
 
 import java.io.IOException;
-import java.io.OutputStream;
-import java.io.OutputStreamWriter;
 import java.io.StringReader;
 import java.net.URISyntaxException;
 import java.security.KeyManagementException;
@@ -22,12 +20,6 @@ import java.util.Map;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
-import javax.xml.transform.OutputKeys;
-import javax.xml.transform.Transformer;
-import javax.xml.transform.TransformerException;
-import javax.xml.transform.TransformerFactory;
-import javax.xml.transform.dom.DOMSource;
-import javax.xml.transform.stream.StreamResult;
 
 import org.apache.http.Header;
 import org.apache.http.HttpException;
@@ -44,7 +36,6 @@ import com.ibm.pem.utilities.sfg2pem.ImportException;
 import com.ibm.pem.utilities.sfg2pem.ValidationException;
 import com.ibm.pem.utilities.sfg2pem.imp.plugins.resources.SftpResourceHelper;
 import com.ibm.pem.utilities.util.ApiResponse;
-import com.ibm.pem.utilities.util.HttpClientUtil;
 
 public class ImportHelper {
 
@@ -52,21 +43,18 @@ public class ImportHelper {
 
 	private static final String LOGMSG_RUNNING_API_GET = "Running API: GET %s";
 
-	private static final String HEADER_ACCEPT = "Accept";
-	private static final String APPLICATION_XML = "application/xml";
-
 	static ApiResponse getPEMPartner(Configuration config, String partnerKey) throws ApiInvocationException {
 		String url = config.getPrRestURL() + "partners/" + partnerKey + "/";
 		Map<String, String> headers = new HashMap<String, String>();
-		headers.put(HEADER_ACCEPT, APPLICATION_XML);
+		headers.put(Constants.HEADER_ACCEPT, Constants.MEDIA_TYPE_APPLICATION_XML);
 
 		if (LOG.isInfoEnabled()) {
 			LOG.info(String.format(LOGMSG_RUNNING_API_GET, url));
 		}
 		ApiResponse apiOutput;
 		try {
-			apiOutput = HttpClientUtil.doGet(url, headers, config.getUserName(), config.getPassword(), config,
-					config.getPrHostName());
+			apiOutput = config.getResourceFactory().createHttpClientInstance().doGet(url, headers, config.getUserName(),
+					config.getPassword(), config, config.getPrHostName());
 		} catch (KeyManagementException | NoSuchAlgorithmException | CertificateException | KeyStoreException
 				| HttpException | IOException | URISyntaxException | ValidationException e) {
 			throw new ApiInvocationException(e);
@@ -77,15 +65,15 @@ public class ImportHelper {
 	static ApiResponse getProdSFGPartner(Configuration config, String sfgPartnerKey) throws ApiInvocationException {
 		String url = config.getSfgProdRestURL() + Constants.SFG_PARTNER_REST_URI + sfgPartnerKey;
 		Map<String, String> headers = new HashMap<String, String>();
-		headers.put(HEADER_ACCEPT, APPLICATION_XML);
+		headers.put(Constants.HEADER_ACCEPT, Constants.MEDIA_TYPE_APPLICATION_XML);
 
 		if (LOG.isInfoEnabled()) {
 			LOG.info(String.format(LOGMSG_RUNNING_API_GET, url));
 		}
 		ApiResponse apiOutput;
 		try {
-			apiOutput = HttpClientUtil.doGet(url, headers, config.getSfgProdUserName(), config.getSfgProdPassword(),
-					config, config.getSfgProdHost());
+			apiOutput = config.getResourceFactory().createHttpClientInstance().doGet(url, headers,
+					config.getSfgProdUserName(), config.getSfgProdPassword(), config, config.getSfgProdHost());
 		} catch (KeyManagementException | NoSuchAlgorithmException | CertificateException | KeyStoreException
 				| HttpException | IOException | URISyntaxException | ValidationException e) {
 			throw new ApiInvocationException(e);
@@ -98,14 +86,14 @@ public class ImportHelper {
 			throws ApiInvocationException {
 		String url = config.getSfgTestRestURL() + Constants.SFG_PARTNER_REST_URI + sfgPartnerKey;
 		Map<String, String> headers = new HashMap<String, String>();
-		headers.put(HEADER_ACCEPT, APPLICATION_XML);
+		headers.put(Constants.HEADER_ACCEPT, Constants.MEDIA_TYPE_APPLICATION_XML);
 		if (LOG.isInfoEnabled()) {
 			LOG.info(String.format(LOGMSG_RUNNING_API_GET, url));
 		}
 		ApiResponse apiOutput;
 		try {
-			apiOutput = HttpClientUtil.doGet(url, headers, config.getSfgTestUserName(), config.getSfgTestPassword(),
-					config, config.getSfgTestHost());
+			apiOutput = config.getResourceFactory().createHttpClientInstance().doGet(url, headers,
+					config.getSfgTestUserName(), config.getSfgTestPassword(), config, config.getSfgTestHost());
 		} catch (KeyManagementException | NoSuchAlgorithmException | CertificateException | KeyStoreException
 				| HttpException | IOException | URISyntaxException | ValidationException e) {
 			throw new ApiInvocationException(e);
@@ -127,24 +115,12 @@ public class ImportHelper {
 		}
 	}
 
-	public static void printDocument(Document doc, OutputStream out) throws IOException, TransformerException {
-		TransformerFactory tf = TransformerFactory.newInstance();
-		Transformer transformer = tf.newTransformer();
-		transformer.setOutputProperty(OutputKeys.OMIT_XML_DECLARATION, "no");
-		transformer.setOutputProperty(OutputKeys.METHOD, "xml");
-		transformer.setOutputProperty(OutputKeys.INDENT, "yes");
-		transformer.setOutputProperty(OutputKeys.ENCODING, "UTF-8");
-		transformer.setOutputProperty("{http://xml.apache.org/xslt}indent-amount", "4");
-
-		transformer.transform(new DOMSource(doc), new StreamResult(new OutputStreamWriter(out, "UTF-8")));
-	}
-
 	public static ApiResponse getResourceFromSFG(boolean getFromProductionSfg, Configuration config, String resourceUri,
 			String resourceKey) throws ApiInvocationException, ImportException {
 		String url = getFromProductionSfg ? config.getSfgProdRestURL() : config.getSfgTestRestURL();
 		url += resourceUri + resourceKey;
 		Map<String, String> headers = new HashMap<String, String>();
-		headers.put("Accept", "application/xml");
+		headers.put(Constants.HEADER_ACCEPT, Constants.MEDIA_TYPE_APPLICATION_XML);
 		try {
 			String userName = getFromProductionSfg ? config.getSfgProdUserName() : config.getSfgTestUserName();
 			char[] password = getFromProductionSfg ? config.getSfgProdPassword() : config.getSfgTestPassword();
@@ -152,7 +128,8 @@ public class ImportHelper {
 			if (LOG.isInfoEnabled()) {
 				LOG.info(String.format(LOGMSG_RUNNING_API_GET, url));
 			}
-			ApiResponse apiOutput = HttpClientUtil.doGet(url, headers, userName, password, config, host);
+			ApiResponse apiOutput = config.getResourceFactory().createHttpClientInstance().doGet(url, headers, userName,
+					password, config, host);
 			if (LOG.isInfoEnabled()) {
 				LOG.info("Response:\n" + apiOutput.getStatusCode() + apiOutput.getResponse());
 			}
@@ -180,7 +157,7 @@ public class ImportHelper {
 		String url = getFromProductionSfg ? config.getSfgProdRestURL() : config.getSfgTestRestURL();
 		url += resourceUri;
 		Map<String, String> headers = new HashMap<String, String>();
-		headers.put("Accept", "application/json");
+		headers.put(Constants.HEADER_ACCEPT, Constants.MEDIA_TYPE_APPLICATION_JSON);
 		try {
 			String userName = getFromProductionSfg ? config.getSfgProdUserName() : config.getSfgTestUserName();
 			char[] password = getFromProductionSfg ? config.getSfgProdPassword() : config.getSfgTestPassword();
@@ -188,7 +165,8 @@ public class ImportHelper {
 			if (LOG.isInfoEnabled()) {
 				LOG.info(String.format(LOGMSG_RUNNING_API_GET, url));
 			}
-			ApiResponse apiOutput = HttpClientUtil.doGet(url, headers, userName, password, config, host);
+			ApiResponse apiOutput = config.getResourceFactory().createHttpClientInstance().doGet(url, headers, userName,
+					password, config, host);
 			if (LOG.isInfoEnabled()) {
 				LOG.info("Response: " + apiOutput.getStatusCode() + "\n" + apiOutput.getResponse());
 			}
@@ -199,7 +177,14 @@ public class ImportHelper {
 					isResponsePresent = false;
 					message = apiOutput.getStatusLine();
 				}
-				throw new ImportException(SftpResourceHelper.getErrorDescription(message, isResponsePresent));
+				try {
+					message = SftpResourceHelper.getErrorDescription(message, isResponsePresent);
+				} catch (Exception e) {
+					if (LOG.isErrorEnabled()) {
+						LOG.error("", e);
+					}
+				}
+				throw new ImportException(message);
 			}
 			apiResponses.add(apiOutput);
 
@@ -207,20 +192,38 @@ public class ImportHelper {
 			int countCalls = 1;
 			int maxResultsPerCall = 1000;
 			int remainingRecords = totalCount - maxResultsPerCall;
+			String url2 = url;
 			while (remainingRecords > 0) {
 				String rangeStr = "_range="
 						+ ((countCalls * maxResultsPerCall) + "-" + ((countCalls + 1) * maxResultsPerCall - 1));
 				if (!url.contains("?")) {
-					url = url + "?" + rangeStr;
+					url2 = url + "?" + rangeStr;
 				} else {
-					url = url + "&" + rangeStr;
+					url2 = url + "&" + rangeStr;
 				}
 				if (LOG.isInfoEnabled()) {
-					LOG.info("Calling " + url);
-					apiOutput = HttpClientUtil.doGet(url, headers, userName, password, config, host);
+					LOG.info("Calling " + url2);
+					apiOutput = config.getResourceFactory().createHttpClientInstance().doGet(url2, headers, userName,
+							password, config, host);
 				}
 				if (LOG.isInfoEnabled()) {
-					LOG.info("Done Calling " + url);
+					LOG.info("Done Calling " + url2);
+				}
+				if (!apiOutput.getStatusCode().equals("200")) {
+					String message = apiOutput.getResponse();
+					boolean isResponsePresent = true;
+					if (message == null || message.isEmpty()) {
+						isResponsePresent = false;
+						message = apiOutput.getStatusLine();
+					}
+					try {
+						message = SftpResourceHelper.getErrorDescription(message, isResponsePresent);
+					} catch (Exception e) {
+						if (LOG.isErrorEnabled()) {
+							LOG.error("", e);
+						}
+					}
+					throw new ImportException(message);
 				}
 				apiResponses.add(apiOutput);
 				remainingRecords = remainingRecords - maxResultsPerCall;
@@ -228,8 +231,7 @@ public class ImportHelper {
 			}
 			return apiResponses;
 		} catch (KeyManagementException | NoSuchAlgorithmException | CertificateException | KeyStoreException
-				| HttpException | IOException | URISyntaxException | ParserConfigurationException | SAXException
-				| ValidationException e) {
+				| HttpException | IOException | URISyntaxException | ValidationException e) {
 			throw new ApiInvocationException(e);
 		}
 	}

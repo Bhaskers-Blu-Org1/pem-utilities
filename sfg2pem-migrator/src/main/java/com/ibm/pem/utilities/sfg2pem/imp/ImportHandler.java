@@ -12,6 +12,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.ibm.pem.utilities.Configuration;
+import com.ibm.pem.utilities.sfg2pem.ImportException;
 import com.ibm.pem.utilities.sfg2pem.ValidationException;
 
 public class ImportHandler {
@@ -24,7 +25,7 @@ public class ImportHandler {
 		this.config = config;
 	}
 
-	public void execute() throws IOException, ValidationException {
+	public void execute() throws IOException, ValidationException, ImportException {
 		if (LOG.isInfoEnabled()) {
 			LOG.info("Processing data from Test SFG.");
 		}

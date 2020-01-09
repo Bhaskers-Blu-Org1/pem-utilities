@@ -28,6 +28,7 @@ dependencies {
 	compile "org.json:json:20160810"
 
 	testImplementation 'junit:junit:4.12'
+	testImplementation 'org.mockito:mockito-core:3.1.0'
 }
 
 // Define the main class for the application

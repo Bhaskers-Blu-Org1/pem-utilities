@@ -1,0 +1,255 @@
+[
+  {
+    "_id": "Cashbank",
+    "_title": "TradingPartner(Cashbank)",
+    "$ref": "http://10.15.100.64:50083/B2BAPIs/svc/tradingpartners/Cashbank",
+    "href": "http://10.15.100.64:50083/B2BAPIs/svc/tradingpartners/Cashbank",
+    "asciiArmor": {
+      "code": false,
+      "display": "No"
+    },
+    "addressLine1": "",
+    "addressLine2": "",
+    "authenticationType": {
+      "code": "Local",
+      "display": "Local"
+    },
+    "city": "",
+    "code": "Cashbank",
+    "community": "community1",
+    "countryOrRegion": {
+      "code": "US",
+      "display": "UNITED STATES"
+    },
+    "doesRequireCompressedData": {
+      "code": false,
+      "display": "No"
+    },
+    "doesRequireEncryptedData": {
+      "code": false,
+      "display": "No"
+    },
+    "doesRequireSignedData": {
+      "code": false,
+      "display": "No"
+    },
+    "doesUseSSH": {
+      "code": true,
+      "display": "Yes"
+    },
+    "emailAddress": "cashbank@in.com",
+    "useGlobalMailbox": {
+      "code": false,
+      "display": "No"
+    },
+    "givenName": "Cashbank",
+    "keyEnabled": {
+      "code": false,
+      "display": "No"
+    },
+    "sessionTimeout": 15,
+    "stateOrProvince": "",
+    "surname": "1",
+    "textMode": {
+      "code": false,
+      "display": "No"
+    },
+    "timeZone": {
+      "code": "-05",
+      "display": "(GMT-05:00) Eastern Time (US & Canada)"
+    },
+    "username": "cashbank",
+    "phone": "98809809",
+    "partnerName": "Cashbank",
+    "consumerSshConfiguration": {
+      "remoteProfile": "RemoteProfile_PR"
+    },
+    "isInitiatingConsumer": {
+      "code": false,
+      "display": "No"
+    },
+    "isInitiatingProducer": {
+      "code": true,
+      "display": "Yes"
+    },
+    "isListeningConsumer": {
+      "code": true,
+      "display": "Yes"
+    },
+    "isListeningProducer": {
+      "code": false,
+      "display": "No"
+    },
+    "publicKeyID": ""
+  },
+  {
+    "_id": "test01-id01",
+    "_title": "TradingPartner(test01-id01)",
+    "$ref": "http://10.15.100.64:50083/B2BAPIs/svc/tradingpartners/test01-id01",
+    "href": "http://10.15.100.64:50083/B2BAPIs/svc/tradingpartners/test01-id01",
+    "asciiArmor": {
+      "code": false,
+      "display": "No"
+    },
+    "addressLine1": "9th Avenue",
+    "addressLine2": "",
+    "authenticationType": {
+      "code": "Local",
+      "display": "Local"
+    },
+    "city": "City9",
+    "code": "test01-id01",
+    "community": "community1",
+    "countryOrRegion": {
+      "code": "US",
+      "display": "UNITED STATES"
+    },
+    "doesRequireCompressedData": {
+      "code": false,
+      "display": "No"
+    },
+    "doesRequireEncryptedData": {
+      "code": false,
+      "display": "No"
+    },
+    "doesRequireSignedData": {
+      "code": false,
+      "display": "No"
+    },
+    "doesUseSSH": {
+      "code": false,
+      "display": "No"
+    },
+    "emailAddress": "Tyrone@partner01.com",
+    "useGlobalMailbox": {
+      "code": false,
+      "display": "No"
+    },
+    "givenName": "Tyrone",
+    "keyEnabled": {
+      "code": false,
+      "display": "No"
+    },
+    "postalCode": "99999",
+    "sessionTimeout": 0,
+    "stateOrProvince": "",
+    "surname": "Masters",
+    "textMode": {
+      "code": false,
+      "display": "No"
+    },
+    "username": "test017481",
+    "phone": "9999999999",
+    "partnerName": "test01-id01",
+    "consumerSshConfiguration": {
+      "remoteProfile": "id01ibtest01"
+    },
+    "isInitiatingConsumer": {
+      "code": false,
+      "display": "No"
+    },
+    "isInitiatingProducer": {
+      "code": false,
+      "display": "No"
+    },
+    "isListeningConsumer": {
+      "code": true,
+      "display": "Yes"
+    },
+    "isListeningProducer": {
+      "code": true,
+      "display": "Yes"
+    },
+    "mailbox": "/test01-id01",
+    "pollingInterval": 5,
+    "producerSshConfiguration": {
+      "remoteProfile": "id01ibtest01"
+    },
+    "publicKeyID": ""
+  },
+  {
+    "_id": "test02-id02",
+    "_title": "TradingPartner(test02-id02)",
+    "$ref": "http://10.15.100.64:50083/B2BAPIs/svc/tradingpartners/test02-id02",
+    "href": "http://10.15.100.64:50083/B2BAPIs/svc/tradingpartners/test02-id02",
+    "asciiArmor": {
+      "code": false,
+      "display": "No"
+    },
+    "addressLine1": "9th Avenue",
+    "addressLine2": "",
+    "authenticationType": {
+      "code": "Local",
+      "display": "Local"
+    },
+    "city": "City9",
+    "code": "test02-id02",
+    "community": "community1",
+    "countryOrRegion": {
+      "code": "US",
+      "display": "UNITED STATES"
+    },
+    "doesRequireCompressedData": {
+      "code": false,
+      "display": "No"
+    },
+    "doesRequireEncryptedData": {
+      "code": false,
+      "display": "No"
+    },
+    "doesRequireSignedData": {
+      "code": false,
+      "display": "No"
+    },
+    "doesUseSSH": {
+      "code": false,
+      "display": "No"
+    },
+    "emailAddress": "Tyrone@partner02.com",
+    "useGlobalMailbox": {
+      "code": false,
+      "display": "No"
+    },
+    "givenName": "Tyrone",
+    "keyEnabled": {
+      "code": false,
+      "display": "No"
+    },
+    "postalCode": "99999",
+    "sessionTimeout": 0,
+    "stateOrProvince": "",
+    "surname": "Masters",
+    "textMode": {
+      "code": false,
+      "display": "No"
+    },
+    "username": "test023675",
+    "phone": "9999999999",
+    "partnerName": "test02-id02",
+    "consumerSshConfiguration": {
+      "remoteProfile": "id02ibtest02"
+    },
+    "isInitiatingConsumer": {
+      "code": false,
+      "display": "No"
+    },
+    "isInitiatingProducer": {
+      "code": false,
+      "display": "No"
+    },
+    "isListeningConsumer": {
+      "code": true,
+      "display": "Yes"
+    },
+    "isListeningProducer": {
+      "code": true,
+      "display": "Yes"
+    },
+    "mailbox": "/test02-id02",
+    "pollingInterval": 5,
+    "producerSshConfiguration": {
+      "remoteProfile": "id02ibtest02"
+    },
+    "publicKeyID": ""
+  }
+]

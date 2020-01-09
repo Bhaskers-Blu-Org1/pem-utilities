@@ -26,14 +26,14 @@ import com.ibm.pem.utilities.sfg2pem.Constants;
 
 public class ManagedSshkeysXSLT {
 
-	public static Document createManagedSshkeys(Configuration config, String managedSshKeyProfileConfig, String prodKeyData, String testKeyData, String keyType)
+	public static Document createManagedSshkeys(Configuration config, String managedSshKeyProfileConfig,
+			String prodKeyData, String testKeyData, String keyType)
 			throws ParserConfigurationException, SAXException, IOException, TransformerException {
 		StringReader dummyInput = new StringReader("<a>pem</a>");
 		StringWriter outPutXml = new StringWriter();
 		TransformerFactory tFactory = TransformerFactory.newInstance();
-		File inputXSLT = new File(config.getInstallDirectory() + "/xslt/managedsshkeys.xsl").getAbsoluteFile();
-		Transformer transformer = tFactory
-				.newTransformer(new javax.xml.transform.stream.StreamSource(inputXSLT));
+		File inputXSLT = new File(config.getXsltDirectory() + "/managedsshkeys.xsl").getAbsoluteFile();
+		Transformer transformer = tFactory.newTransformer(new javax.xml.transform.stream.StreamSource(inputXSLT));
 		transformer.setParameter("configurationId", managedSshKeyProfileConfig);
 		transformer.setParameter("prodType", Constants.PROD);
 		transformer.setParameter("testType", Constants.TEST);

@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<TradingPartner _id="%s" addressLine1="9th Avenue"
+    city="City9" code="%s" community="community1"
+    emailAddress="Tyrone@%s.com" givenName="Tyrone" postalCode="99999"
+    sessionTimeout="0" surname="Masters" username="%s" phone="9999999999"
+    partnerName="%s">
+    <asciiArmor code="false" display="No" />
+    <authenticationType code="Local" display="Local" />
+    <countryOrRegion code="US" display="UNITED STATES" />
+    <doesRequireCompressedData code="false"
+        display="No" />
+    <doesRequireEncryptedData code="false"
+        display="No" />
+    <doesRequireSignedData code="false" display="No" />
+    <doesUseSSH code="true" display="Yes" />
+    <useGlobalMailbox code="false" display="No" />
+    <keyEnabled code="false" display="No" />
+    <textMode code="false" display="No" />
+    <isInitiatingConsumer code="true" display="Yes" />
+    <isInitiatingProducer code="true" display="Yes" />
+    <isListeningConsumer code="false" display="No" />
+    <isListeningProducer code="false" display="No" />
+</TradingPartner>

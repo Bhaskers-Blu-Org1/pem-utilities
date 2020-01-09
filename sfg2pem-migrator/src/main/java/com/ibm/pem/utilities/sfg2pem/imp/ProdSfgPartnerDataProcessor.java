@@ -11,6 +11,10 @@ import java.io.FileInputStream;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -19,7 +23,6 @@ import java.util.concurrent.Executors;
 
 import javax.xml.parsers.ParserConfigurationException;
 
-import org.apache.commons.io.FilenameUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.w3c.dom.Document;
@@ -34,9 +37,8 @@ import com.ibm.pem.utilities.sfg2pem.ImportException;
 import com.ibm.pem.utilities.sfg2pem.ValidationException;
 import com.ibm.pem.utilities.sfg2pem.imp.PartnerInfo.PartnerInfoField;
 import com.ibm.pem.utilities.sfg2pem.imp.PartnerInfo.ProcessingStatus;
-import com.ibm.pem.utilities.sfg2pem.imp.plugins.resources.SftpResourceHelper;
 import com.ibm.pem.utilities.util.ApiResponse;
-import com.ibm.pem.utilities.util.CreateFileUtil;
+import com.ibm.pem.utilities.util.DOMUtils;
 
 public class ProdSfgPartnerDataProcessor {
 
@@ -65,17 +67,17 @@ public class ProdSfgPartnerDataProcessor {
 	public void setTestSfgPartnerMap(HashMap<String, String> testSfgPartnerMap) {
 		this.testSfgPartnerMap = testSfgPartnerMap;
 	}
-	
+
 	public void setPartnerGroupIdMap(HashMap<String, String> partnerGroupIdMap) {
 		this.partnerGroupIdMap = partnerGroupIdMap;
 	}
 
-	public void execute() throws IOException, ValidationException {
+	public void execute() throws IOException, ValidationException, ImportException {
 
 		// Read partners from partners-prod.csv
 		BufferedReader reader = new BufferedReader(
 				new InputStreamReader(new FileInputStream(config.getProdSfgFilePath()), "UTF-8"));
-		
+
 		// Initialize the writer
 		FileWriter writer = null;
 		FileWriter partnerBulkUploadWriter = null;
@@ -91,13 +93,12 @@ public class ProdSfgPartnerDataProcessor {
 			writeHeaders(headerInfo, writer);
 
 			/* Gets headers info of pem partner bulk upload file */
-			HeaderInfo partnerBulkUploadHeaderInfo = new PartnerBulkUploadHeaderInfo(config.getProps());;
+			HeaderInfo partnerBulkUploadHeaderInfo = new PartnerBulkUploadHeaderInfo(config.getProps());
+
 			writeHeaders(partnerBulkUploadHeaderInfo, partnerBulkUploadWriter);
 
 			processData(reader, headerInfo, writer, partnerBulkUploadHeaderInfo, partnerBulkUploadWriter);
 
-			backuptheInputFile();
-			renameTheOutPutFile();
 		} finally {
 			if (reader != null) {
 				reader.close();
@@ -106,32 +107,29 @@ public class ProdSfgPartnerDataProcessor {
 				writer.flush();
 				writer.close();
 			}
-			
+
 			if (partnerBulkUploadWriter != null) {
 				partnerBulkUploadWriter.flush();
 				partnerBulkUploadWriter.close();
 			}
 		}
+		backupFiles();
 	}
 
-	private void renameTheOutPutFile() {
-		String filePath = config.getProdOutPutFile().getAbsoluteFile().getAbsolutePath();
-		File oldFileName = new File(filePath);
-		File newFileName = new File(config.getProdSfgFilePath());
-		oldFileName.renameTo(newFileName);
-	}
-
-	private void backuptheInputFile() {
-		String filePath = new File(config.getProdSfgFilePath()).getAbsolutePath();
-		File oldFileName = new File(filePath);
-		if (FilenameUtils.getExtension(filePath).equals("csv")) {
-			filePath = FilenameUtils.removeExtension(filePath);
+	private void backupFiles() throws ImportException {
+		String inputFilePath = new File(config.getProdSfgFilePath()).getAbsolutePath();
+		Path inputFile = Paths.get(inputFilePath);
+		Path outputFile = Paths.get(config.getProdOutPutFile().getAbsoluteFile().getAbsolutePath());
+		Path tmpFile = Paths.get(inputFilePath + "-bkp");
+		try {
+			Files.move(inputFile, inputFile.resolveSibling(tmpFile), StandardCopyOption.REPLACE_EXISTING);
+			Files.move(outputFile, outputFile.resolveSibling(inputFile), StandardCopyOption.REPLACE_EXISTING);
+			Files.move(tmpFile, tmpFile.resolveSibling(outputFile), StandardCopyOption.REPLACE_EXISTING);
+		} catch (IOException e) {
+			throw new ImportException(e);
 		}
-		File newFileName = new File(filePath + "_" + CreateFileUtil.generateTimeStamp() + ".csv");
-		oldFileName.renameTo(newFileName);
 	}
 
-	// TODO rename params
 	private void processData(BufferedReader reader, HeaderInfo headerInfo, FileWriter writer,
 			HeaderInfo partnerBulkUploadHeaderInfo, FileWriter partnerBulkUploadWriter) throws IOException {
 		ExecutorService executorService = Executors.newFixedThreadPool(1);
@@ -144,9 +142,9 @@ public class ProdSfgPartnerDataProcessor {
 			if (lineData.isEmpty()) {
 				continue;
 			}
-			executorService.execute(new ProdSfgPartnerDataProcessingTask(headerInfo, testSfgPartnerMap, partnerGroupIdMap, lineData,
-					linecounter, delimiter, config, handlerFactory, writer, this.partnerGroupIdList,
-					partnerBulkUploadHeaderInfo, partnerBulkUploadWriter));
+			executorService.execute(new ProdSfgPartnerDataProcessingTask(headerInfo, testSfgPartnerMap,
+					partnerGroupIdMap, lineData, linecounter, delimiter, config, handlerFactory, writer,
+					this.partnerGroupIdList, partnerBulkUploadHeaderInfo, partnerBulkUploadWriter));
 		}
 
 		executorService.shutdown();
@@ -173,9 +171,10 @@ public class ProdSfgPartnerDataProcessor {
 		private FileWriter partnerBulkUploadWriter;
 
 		public ProdSfgPartnerDataProcessingTask(HeaderInfo headerInfo, HashMap<String, String> testSfgPartnerMap,
-				HashMap<String, String> partnerGroupIdMap, String partnerData, int rowId, String delimiter, Configuration config,
-				ImportHandlerFactory handlerFactory, FileWriter writer, List<String> partnerGroupIdList,
-				HeaderInfo partnerBulkUploadHeaderInfo, FileWriter partnerBulkUploadWriter) {
+				HashMap<String, String> partnerGroupIdMap, String partnerData, int rowId, String delimiter,
+				Configuration config, ImportHandlerFactory handlerFactory, FileWriter writer,
+				List<String> partnerGroupIdList, HeaderInfo partnerBulkUploadHeaderInfo,
+				FileWriter partnerBulkUploadWriter) {
 			this.headerInfo = headerInfo;
 			this.testSfgPartnerMap = testSfgPartnerMap;
 			this.partnerData = partnerData;
@@ -239,8 +238,8 @@ public class ProdSfgPartnerDataProcessor {
 			String pemPartnerKey = partnerInfo.getPemPartnerKey().trim();
 
 			ProcessingStatus processingStatus = partnerInfo.getProcessingStatus();
-			
-			if (processingStatus != ProcessingStatus.NOT_PROCESSED && processingStatus != ProcessingStatus.ERROR ) {
+
+			if (processingStatus != ProcessingStatus.NOT_PROCESSED && processingStatus != ProcessingStatus.ERROR) {
 				// Invalid status for processing. Write the data as it is.
 				if (partnerGroupIdMap != null && partnerGroupIdMap.containsKey(pemPartnerKey)) {
 					pemPartnerKey = partnerGroupIdMap.get(pemPartnerKey);
@@ -250,7 +249,6 @@ public class ProdSfgPartnerDataProcessor {
 					return;
 				}
 			}
-
 
 			if (pemPartnerKey.startsWith(Constants.PARTNER_GROUP_ID_PREFIX)) {
 				synchronized (pemPartnerKey) {
@@ -272,25 +270,28 @@ public class ProdSfgPartnerDataProcessor {
 				}
 
 				// Fetch partner and configuration info from SFG-prod
-				ApiResponse prodApiResponse = ImportHelper.getProdSFGPartner(config, 
+				ApiResponse prodApiResponse = ImportHelper.getProdSFGPartner(config,
 						partnerInfo.getSfgPartnerKey().trim());
 				String getProdSfgPartnerApiResponse = validateSfgPartnerExistsAndGet(prodApiResponse);
-				
+
 				// Fetch partner and configuration info from SFG-test
 				ApiResponse testApiResponse = ImportHelper.getTestSFGPartner(config, testSfgPartnerKey);
 				String getTestSfgPartnerApiResponse = validateSfgPartnerExistsAndGet(testApiResponse);
-		
+
 				Document prodSfgPartner = ImportHelper.buildDomDoc(getProdSfgPartnerApiResponse);
 				Document testSfgPartner = ImportHelper.buildDomDoc(getTestSfgPartnerApiResponse);
 
-				PrConfigurationImportHandler handler = handlerFactory.getConfigurationHandler(prodSfgPartner, testSfgPartner);
+				PrConfigurationImportHandler handler = handlerFactory.getConfigurationHandler(prodSfgPartner,
+						testSfgPartner);
 				if (handler == null) {
 					throw new ValidationException("SFTP Profile does not exists as part of SFG Partner.");
 				}
 
-				String prodSfgUserName = SftpResourceHelper.getAttributeValueByTagName(prodApiResponse.getResponse(), "TradingPartner", "username");
-				String testSfgUserName = SftpResourceHelper.getAttributeValueByTagName(testApiResponse.getResponse(), "TradingPartner", "username");
-			
+				String prodSfgUserName = DOMUtils.getAttributeValueByTagName(prodApiResponse.getResponse(),
+						"TradingPartner", "username");
+				String testSfgUserName = DOMUtils.getAttributeValueByTagName(testApiResponse.getResponse(),
+						"TradingPartner", "username");
+
 				partnerInfo.setProdSfgPartnerDoc(prodSfgPartner);
 				partnerInfo.setTestSfgPartnerKey(testSfgPartnerKey);
 				partnerInfo.setTestSfgUserName(testSfgUserName);
